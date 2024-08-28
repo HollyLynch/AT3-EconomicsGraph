@@ -1,0 +1,23 @@
+html {
+  height: 100%;
+  width: 100%;
+}
+/* !!# means id, . means class!! */
+
+/* for the handles */
+.drag-handle {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+#xDeHandle {
+  background: #157dc2;
+}
+#yDeHandle {
+  background: #157dc2;
+}
+#SuHandle {
+  background: #fa325d;
+}
