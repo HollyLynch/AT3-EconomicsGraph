@@ -5,8 +5,16 @@ var yDe = 1
 var xSu = 1
 var ySu = 1
 //x and y intersect values
-var xIn = (yDe/((ySu/xSu)+(yDe/xDe)))
-var yIn = ((-(yDe)/xDe)*(yDe/((ySu/xSu)+(yDe/xDe)))+yDe)
+//var xIn = (yDe/((ySu/xSu)+(yDe/xDe)))
+//var yIn = ((-(yDe)/xDe)*(yDe/((ySu/xSu)+(yDe/xDe)))+yDe)
+
+// Function to recalculate x and y intersection values
+function recalculateIntersections() {
+  xIn = (yDe / ((ySu / xSu) + (yDe / xDe)));
+  yIn = ((-(yDe) / xDe) * (yDe / ((ySu / xSu) + (yDe / xDe))) + yDe);
+}
+recalculateIntersections();
+
 
 function updateChartData(chart) {
   //updating the data point in the chart dataset
@@ -20,6 +28,7 @@ function updateChartData(chart) {
   //x equilibrium
   chart.data.datasets[3].data = [{x: xIn, y: yIn}, {x: xIn, y: 0}];
   //y equiilibrium
+  //red
   chart.data.datasets[4].data = [{x: 0, y: yIn}, {x: xIn, y: yIn}];
 
   // Find the maximum x and y values among all datasets
@@ -68,7 +77,7 @@ var myChart = new Chart(ctx, {
    {
      label: 'Y-Equilibrium',
      data: [{x: 0, y: yIn}, {x: xIn, y: yIn}],
-     borderColor: "black",
+     borderColor: /*"black"*/ "red",
      borderDash: [4,4],
      fill: false,
    }
@@ -100,8 +109,6 @@ var myChart = new Chart(ctx, {
 });
 updateChartData(myChart)
 
-//screenshot^^^^
-
 //'handles' to move the lines
 function positionHandles() {
   var canvasPosition = myChart.canvas.getBoundingClientRect();
@@ -123,6 +130,7 @@ function positionHandles() {
 }
 
 positionHandles()
+
 //resizes the handles when the window is resized
 window.addEventListener('resize', positionHandles)
 
@@ -137,25 +145,41 @@ xDeHandle.addEventListener('mousedown', function(e) {
   //the handle drags when the mouse is pressed down
   isDragging = true;
   xDeDragging = true;
-  yDeDragging = true;
   // console.log("dragging");
 });
-//add this for other handles
+yDeHandle.addEventListener('mousedown', function (e) {
+  //the handle drags when the mouse is pressed down
+  isDragging = true;
+  yDeDragging = true;
+});
+//add this for other handles!!!
 
 window.addEventListener('mousemove', function(e) {
   //moves the handles when the mouse moves
+  //toFixed means to the 1st decimal point (0 is none, 2 is 2nd etc)
   if(isDragging) {
     if(xDeDragging) {
       xDe = (myChart.scales.x.getValueForPixel(e.clientX - myChart.canvas.getBoundingClientRect().left)).toFixed(1);
+      if (xDe <= 0) {
+        //sets min as 0
+        xDe = 0;
+      }
+
       console.log(xDe);
+      //updateChartData(myChart);
+    }
+    if(yDeDragging) {
+      yDe = (myChart.scales.y.getValueForPixel(e.clientY - myChart.canvas.getBoundingClientRect().top)).toFixed(1);
+      if (yDe <= 0) {
+        //sets min as 0
+        yDe = 0;
+      }
 
-      updateChartData(myChart);
+      console.log(yDe);
     }
-    if(yDeDragging) { //HAVENT FINISHED
-      yDe = (myChart.scales.x.getValueForPixel(e.clientY - myChart.canvas.getBoundingClientRect().top));
-    }
+
     //add ***Dragging for the rest
-
+    updateChartData(myChart); //updated chart for all the drags
     positionHandles(); //updates the handles
   }
 });
