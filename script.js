@@ -103,7 +103,10 @@ var myChart = new Chart(ctx, {
             return item.text !== 'S->D' && item.text !== 'X-Equilibrium' && item.text !== 'Y-Equilibrium';
           }
         }
-      }
+      },
+        afterRender: function (chart) {
+          positionHandles();
+        }
     }
   }
 });
@@ -115,14 +118,23 @@ function positionHandles() {
 
   //demand x handle
   var xDeHandle = document.getElementById('xDeHandle');
-  xDeHandle.style.left = canvasPosition.left +(myChart.scales.x.getPixelForValue(xDe) - 10) + 'px'; //-10 for half of the handle width
-  xDeHandle.style.top = canvasPosition.top + (myChart.scales.y.getPixelForValue(0) - 10) + 'px'; //-10 for half of the handle height
+  xDeHandle.style.left = (canvasPosition.left + window.scrollX + myChart.scales.x.getPixelForValue(xDe) - 10) + 'px'; // -10 for half of the handle width
+  //xDeHandle.style.left = canvasPosition.left +(myChart.scales.x.getPixelForValue(xDe) - 10) + 'px'; //-10 for half of the handle width
+  xDeHandle.style.top = (canvasPosition.top + window.scrollY + myChart.scales.y.getPixelForValue(0) - 10) + 'px'; // -10 for half of the handle height
+  //xDeHandle.style.top = canvasPosition.top + (myChart.scales.y.getPixelForValue(0) - 10) + 'px'; //-10 for half of the handle height
+  console.log("top " + canvasPosition.top)
+  console.log("scale " + (myChart.scales.y.getPixelForValue(0) - 10))
+  console.log("handle " + xDeHandle.style.top)
 
   //demand y handle
   var yDeHandle = document.getElementById('yDeHandle');
-  yDeHandle.style.left = canvasPosition.left +(myChart.scales.x.getPixelForValue(0) - 10) + 'px'; //-10 for half of the handle width
-  yDeHandle.style.top = canvasPosition.top + (myChart.scales.y.getPixelForValue(yDe) - 10) + 'px'; //-10 for half of the handle height
+  //yDeHandle.style.left = canvasPosition.left +(myChart.scales.x.getPixelForValue(0) - 10) + 'px'; //-10 for half of the handle width
+  //yDeHandle.style.top = canvasPosition.top + (myChart.scales.y.getPixelForValue(yDe) - 10) + 'px'; //-10 for half of the handle height
+  yDeHandle.style.left = (canvasPosition.left + window.scrollX + myChart.scales.x.getPixelForValue(0) - 10) + 'px'; // -10 for half of the handle width
+  yDeHandle.style.top = (canvasPosition.top + window.scrollY + myChart.scales.y.getPixelForValue(yDe) - 10) + 'px'; // -10 for half of the handle height
+ 
 
+  //delete the supply handle for the screenshot
   //supply handle
   var SuHandle = document.getElementById('SuHandle');
   SuHandle.style.left = canvasPosition.left +(myChart.scales.x.getPixelForValue(xSu) - 10) + 'px'; //-10 for half of the handle width
@@ -132,7 +144,12 @@ function positionHandles() {
 positionHandles()
 
 //resizes the handles when the window is resized
-window.addEventListener('resize', positionHandles)
+//window.addEventListener('resize', positionHandles)
+window.addEventListener('resize', function () {
+  myChart.resize(); // Ensure the chart itself is resized correctly
+  positionHandles(); // Update handle positions after resizing the chart
+
+});
 
 var xDeHandle = document.getElementById('xDeHandle');
 var yDeHandle = document.getElementById('yDeHandle');
