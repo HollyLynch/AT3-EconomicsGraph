@@ -147,16 +147,20 @@ positionHandles()
 //window.addEventListener('resize', positionHandles)
 window.addEventListener('resize', function () {
   myChart.resize(); // Ensure the chart itself is resized correctly
+
+  updateChartData(myChart);
   positionHandles(); // Update handle positions after resizing the chart
 
 });
 
 var xDeHandle = document.getElementById('xDeHandle');
 var yDeHandle = document.getElementById('yDeHandle');
+var suHandle = document.getElementById('SuHandle');
   
 var isDragging = false;
 var xDeDragging = false;
 var yDeDragging = false;
+var suDragging = false;
 
 xDeHandle.addEventListener('mousedown', function(e) {
   //the handle drags when the mouse is pressed down
@@ -165,9 +169,12 @@ xDeHandle.addEventListener('mousedown', function(e) {
   // console.log("dragging");
 });
 yDeHandle.addEventListener('mousedown', function (e) {
-  //the handle drags when the mouse is pressed down
   isDragging = true;
   yDeDragging = true;
+});
+suHandle.addEventListener('mousedown', function (e) {
+  isDragging = true;
+  suDragging = true;
 });
 //add this for other handles!!!
 
@@ -191,8 +198,14 @@ window.addEventListener('mousemove', function(e) {
         //sets min as 0
         yDe = 0;
       }
-
       console.log(yDe);
+    }
+    if (suDragging) {
+      ySu = (myChart.scales.y.getValueForPixel(e.clientY - myChart.canvas.getBoundingClientRect().top)).toFixed(1);
+      if (ySu <= 0) {
+        //sets min as 0
+        ySu = 0;
+      }
     }
 
     //add ***Dragging for the rest
@@ -211,5 +224,8 @@ window.addEventListener('mouseup', function(e) {
   }
   if (yDeDragging) {
     yDeDragging = false;
+  }
+  if (SuDragging) {
+    SuDragging = false;
   }
 })
