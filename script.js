@@ -2,16 +2,16 @@ var ctx = document.getElementById('myChart').getContext('2d');
 //values when the lines are moved
 var xDe = 1
 var yDe = 1
-var xSu = 1
-var ySu = 1
+var xSuU = 1
+var ySuU = 1
 //x and y intersect values
 //var xIn = (yDe/((ySu/xSu)+(yDe/xDe)))
 //var yIn = ((-(yDe)/xDe)*(yDe/((ySu/xSu)+(yDe/xDe)))+yDe)
 
 // Function to recalculate x and y intersection values
 function recalculateIntersections() {
-  xIn = (yDe / ((ySu / xSu) + (yDe / xDe)));
-  yIn = ((-(yDe) / xDe) * (yDe / ((ySu / xSu) + (yDe / xDe))) + yDe);
+  xIn = (yDe / ((ySuU / xSuU) + (yDe / xDe)));
+  yIn = ((-(yDe) / xDe) * (yDe / ((ySuU / xSuU) + (yDe / xDe))) + yDe);
 }
 recalculateIntersections();
 
@@ -19,7 +19,7 @@ recalculateIntersections();
 function updateChartData(chart) {
   //updating the data point in the chart dataset
   //supply line
-  chart.data.datasets[0].data = [{x: 0, y: 0}, {x: xSu, y: ySu}];
+  chart.data.datasets[0].data = [{x: 0, y: 0}, {x: xSuU, y: ySuU}];
   //demand line
   chart.data.datasets[1].data = [{x: 0, y: yDe}, {x: xDe, y: 0}];
   //the inbetween bit
@@ -32,8 +32,8 @@ function updateChartData(chart) {
   chart.data.datasets[4].data = [{x: 0, y: yIn}, {x: xIn, y: yIn}];
 
   // Find the maximum x and y values among all datasets
-  let maxX = Math.max(xDe, xSu, xIn) + 0.2; // Adding 0.2 for extra space
-  let maxY = Math.max(yDe, ySu, yIn) + 0.2; // Adding 0.2 for extra space
+  let maxX = Math.max(xDe, xSuU, xIn) + 0.2; // Adding 0.2 for extra space
+  let maxY = Math.max(yDe, ySuU, yIn) + 0.2; // Adding 0.2 for extra space
 
   // Update the axis limits
   chart.options.scales.x.min = 0;
@@ -41,6 +41,7 @@ function updateChartData(chart) {
   chart.options.scales.y.min = 0;
   chart.options.scales.y.max = maxY;
 
+  recalculateIntersections();
   
   chart.update() //redraws chart
 }
@@ -136,9 +137,11 @@ function positionHandles() {
 
   //delete the supply handle for the screenshot
   //supply handle
-  var SuHandle = document.getElementById('SuHandle');
-  SuHandle.style.left = canvasPosition.left +(myChart.scales.x.getPixelForValue(xSu) - 10) + 'px'; //-10 for half of the handle width
-  SuHandle.style.top = canvasPosition.top + (myChart.scales.y.getPixelForValue(ySu) - 10) + 'px'; //-10 for half of the handle height
+  var ySuHandle = document.getElementById('ySuHandle');
+  ySuHandle.style.left = (canvasPosition.left + window.scrollX + myChart.scales.x.getPixelForValue(xSuU) - 10) + 'px'; // -10 for half of the handle width
+  ySuHandle.style.top = (canvasPosition.top + window.scrollY + myChart.scales.y.getPixelForValue(ySuU) - 10) + 'px'; // -10 for half of the handle height
+  //SuHandle.style.left = canvasPosition.left +(myChart.scales.x.getPixelForValue(xSuU) - 10) + 'px'; //-10 for half of the handle width
+  //SuHandle.style.top = canvasPosition.top + (myChart.scales.y.getPixelForValue(ySuU) - 10) + 'px'; //-10 for half of the handle height
 }
 
 positionHandles()
@@ -155,12 +158,12 @@ window.addEventListener('resize', function () {
 
 var xDeHandle = document.getElementById('xDeHandle');
 var yDeHandle = document.getElementById('yDeHandle');
-var suHandle = document.getElementById('SuHandle');
+var ySuHandle = document.getElementById('ySuHandle');
   
 var isDragging = false;
 var xDeDragging = false;
 var yDeDragging = false;
-var suDragging = false;
+var ySuUDragging = false;
 
 xDeHandle.addEventListener('mousedown', function(e) {
   //the handle drags when the mouse is pressed down
@@ -172,9 +175,9 @@ yDeHandle.addEventListener('mousedown', function (e) {
   isDragging = true;
   yDeDragging = true;
 });
-suHandle.addEventListener('mousedown', function (e) {
+ySuHandle.addEventListener('mousedown', function (e) {
   isDragging = true;
-  suDragging = true;
+  ySuUDragging = true;
 });
 //add this for other handles!!!
 
@@ -200,15 +203,21 @@ window.addEventListener('mousemove', function(e) {
       }
       console.log(yDe);
     }
-    if (suDragging) {
-      ySu = (myChart.scales.y.getValueForPixel(e.clientY - myChart.canvas.getBoundingClientRect().top)).toFixed(1);
-      if (ySu <= 0) {
+    if (ySuUDragging) {
+      ySuU = (myChart.scales.y.getValueForPixel(e.clientY - myChart.canvas.getBoundingClientRect().top)).toFixed(1);
+      if (ySuU <= 0) {
         //sets min as 0
-        ySu = 0;
+        ySuU = 0;
+      }
+      xSuU = (myChart.scales.x.getValueForPixel(e.clientX - myChart.canvas.getBoundingClientRect().left)).toFixed(1);
+      if (xSuU <= 0) {
+        //sets min as 0
+        xSuU = 0;
       }
     }
 
     //add ***Dragging for the rest
+    recalculateIntersections();
     updateChartData(myChart); //updated chart for all the drags
     positionHandles(); //updates the handles
   }
@@ -225,7 +234,7 @@ window.addEventListener('mouseup', function(e) {
   if (yDeDragging) {
     yDeDragging = false;
   }
-  if (SuDragging) {
-    SuDragging = false;
+  if (ySuUDragging) {
+    ySuUDragging = false;
   }
 })
