@@ -4,14 +4,20 @@ var xDe = 1
 var yDe = 1
 var xSuU = 1
 var ySuU = 1
+var ySuL = 1
 //x and y intersect values
 //var xIn = (yDe/((ySu/xSu)+(yDe/xDe)))
 //var yIn = ((-(yDe)/xDe)*(yDe/((ySu/xSu)+(yDe/xDe)))+yDe)
 
 // Function to recalculate x and y intersection values
 function recalculateIntersections() {
-  xIn = (yDe / ((ySuU / xSuU) + (yDe / xDe)));
-  yIn = ((-(yDe) / xDe) * (yDe / ((ySuU / xSuU) + (yDe / xDe))) + yDe);
+  //yIn is the demand linear equation
+  //xIn = ((yDe / ((ySuU / xSuU)+(yDe / xDe))));
+  //yIn = ((-(yDe) / xDe) * (yDe / ((ySuU / xSuU) + (yDe / xDe))) + yDe);
+
+  //NOT CORRECT NEED TO RE-LOOK AT AND REDO :)
+  xIn = (((ySuU - ySuL) / xSuU) * ((yDe + ySuL) / (((ySuU - ySuL) / (xSuU)) + (yDe / xDe)) + ySuL));
+  yIn = ((-(yDe) / xDe) * ((yDe + ySuL) / (((ySuU - ySuL) / ySuU) + (yDe / xDe))) + yDe);
 }
 recalculateIntersections();
 
