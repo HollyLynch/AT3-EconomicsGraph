@@ -4,10 +4,7 @@ var xDe = 1
 var yDe = 1
 var xSuU = 1
 var ySuU = 1
-var ySuL = 1
-//x and y intersect values
-//var xIn = (yDe/((ySu/xSu)+(yDe/xDe)))
-//var yIn = ((-(yDe)/xDe)*(yDe/((ySu/xSu)+(yDe/xDe)))+yDe)
+var ySuL = 0
 
 // Function to recalculate x and y intersection values
 function recalculateIntersections() {
@@ -15,9 +12,14 @@ function recalculateIntersections() {
   //xIn = ((yDe / ((ySuU / xSuU)+(yDe / xDe))));
   //yIn = ((-(yDe) / xDe) * (yDe / ((ySuU / xSuU) + (yDe / xDe))) + yDe);
 
-  //NOT CORRECT NEED TO RE-LOOK AT AND REDO :)
-  xIn = (((ySuU - ySuL) / xSuU) * ((yDe + ySuL) / (((ySuU - ySuL) / (xSuU)) + (yDe / xDe)) + ySuL));
-  yIn = ((-(yDe) / xDe) * ((yDe + ySuL) / (((ySuU - ySuL) / ySuU) + (yDe / xDe))) + yDe);
+  //when yDe moves yIn turns negative but i can't find why
+  //supply
+  xIn = ((((ySuU - ySuL) / xSuU) * ((yDe - ySuL) / (((ySuU - ySuL) / (xSuU)) + (yDe / xDe)))) + ySuL);
+  //demand
+  //this isn't equalling what it should when yDe moves
+  yIn = (((-(yDe) / xDe) * ((yDe - ySuL) / (((ySuU - ySuL) / (xSuU)) + (yDe / xDe)))) + yDe);
+  //yIn = (((-(yDe) / xDe) * xIn) + yDe); //edchat
+
 }
 recalculateIntersections();
 
@@ -25,7 +27,7 @@ recalculateIntersections();
 function updateChartData(chart) {
   //updating the data point in the chart dataset
   //supply line
-  chart.data.datasets[0].data = [{x: 0, y: 0}, {x: xSuU, y: ySuU}];
+  chart.data.datasets[0].data = [{x: 0, y: ySuL}, {x: xSuU, y: ySuU}];
   //demand line
   chart.data.datasets[1].data = [{x: 0, y: yDe}, {x: xDe, y: 0}];
   //the inbetween bit
@@ -39,7 +41,7 @@ function updateChartData(chart) {
 
   // Find the maximum x and y values among all datasets
   let maxX = Math.max(xDe, xSuU, xIn) + 0.2; // Adding 0.2 for extra space
-  let maxY = Math.max(yDe, ySuU, yIn) + 0.2; // Adding 0.2 for extra space
+  let maxY = Math.max(yDe, ySuU, ySuL, yIn) + 0.2; // Adding 0.2 for extra space
 
   // Update the axis limits
   chart.options.scales.x.min = 0;
@@ -70,7 +72,7 @@ var myChart = new Chart(ctx, {
     },
     {
       label: 'S->D',
-      data: [{x: 0, y: 0}, {x: xIn, y: yIn}, {x: xDe, y: 0}],
+      data: [{x: 0, y: ySuL}, {x: xIn, y: yIn}, {x: xDe, y: 0}],
       borderColor: "#36a3eb", //so it blends in with the demand line
       fill: 'start',
     },
@@ -197,6 +199,8 @@ window.addEventListener('mousemove', function(e) {
         //sets min as 0
         xDe = 0;
       }
+      console.log(xIn + " x")
+      console.log(yIn + " y")
 
       console.log(xDe);
       //updateChartData(myChart);
@@ -207,13 +211,16 @@ window.addEventListener('mousemove', function(e) {
         //sets min as 0
         yDe = 0;
       }
-      console.log(yDe);
+      console.log(yDe + " yDe", xDe + " xDe", xSuU + " xSuU", ySuU + " ySuU", ySuL + " ySuL");
+      console.log(xIn + " x")
+      console.log(yIn + " y")
     }
     if (ySuUDragging) {
       ySuU = (myChart.scales.y.getValueForPixel(e.clientY - myChart.canvas.getBoundingClientRect().top)).toFixed(1);
       if (ySuU <= 0) {
         //sets min as 0
         ySuU = 0;
+
       }
       xSuU = (myChart.scales.x.getValueForPixel(e.clientX - myChart.canvas.getBoundingClientRect().left)).toFixed(1);
       if (xSuU <= 0) {
