@@ -4,6 +4,12 @@ html {
 }
 /* !!# means id, . means class!! */
 
+.chart-container {
+    position: relative;
+    height: 60%;
+    width: 80%;
+}
+
 /* for the handles */
 .drag-handle {
   position: absolute;

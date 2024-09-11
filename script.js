@@ -121,19 +121,21 @@ var myChart = new Chart(ctx, {
 });
 updateChartData(myChart)
 
+
 //'handles' to move the lines
 function positionHandles() {
   var canvasPosition = myChart.canvas.getBoundingClientRect();
 
   //demand x handle
   var xDeHandle = document.getElementById('xDeHandle');
-  xDeHandle.style.left = (canvasPosition.left + window.scrollX + myChart.scales.x.getPixelForValue(xDe) - 10) + 'px'; // -10 for half of the handle width
   //xDeHandle.style.left = canvasPosition.left +(myChart.scales.x.getPixelForValue(xDe) - 10) + 'px'; //-10 for half of the handle width
-  xDeHandle.style.top = (canvasPosition.top + window.scrollY + myChart.scales.y.getPixelForValue(0) - 10) + 'px'; // -10 for half of the handle height
   //xDeHandle.style.top = canvasPosition.top + (myChart.scales.y.getPixelForValue(0) - 10) + 'px'; //-10 for half of the handle height
+  xDeHandle.style.left = (canvasPosition.left + window.scrollX + myChart.scales.x.getPixelForValue(xDe) - 10) + 'px'; // -10 for half of the handle width
+  xDeHandle.style.top = (canvasPosition.top + window.scrollY + myChart.scales.y.getPixelForValue(0) - 10) + 'px'; // -10 for half of the handle height
   console.log("top " + canvasPosition.top)
   console.log("scale " + (myChart.scales.y.getPixelForValue(0) - 10))
   console.log("handle " + xDeHandle.style.top)
+
 
   //demand y handle
   var yDeHandle = document.getElementById('yDeHandle');
@@ -143,13 +145,20 @@ function positionHandles() {
   yDeHandle.style.top = (canvasPosition.top + window.scrollY + myChart.scales.y.getPixelForValue(yDe) - 10) + 'px'; // -10 for half of the handle height
  
 
-  //delete the supply handle for the screenshot
-  //supply handle
+  //supply y handle
   var ySuHandle = document.getElementById('ySuHandle');
   ySuHandle.style.left = (canvasPosition.left + window.scrollX + myChart.scales.x.getPixelForValue(xSuU) - 10) + 'px'; // -10 for half of the handle width
   ySuHandle.style.top = (canvasPosition.top + window.scrollY + myChart.scales.y.getPixelForValue(ySuU) - 10) + 'px'; // -10 for half of the handle height
   //SuHandle.style.left = canvasPosition.left +(myChart.scales.x.getPixelForValue(xSuU) - 10) + 'px'; //-10 for half of the handle width
   //SuHandle.style.top = canvasPosition.top + (myChart.scales.y.getPixelForValue(ySuU) - 10) + 'px'; //-10 for half of the handle height
+
+  console.log("test")
+  //supply x handle
+  var xSuHandle = document.getElementById('xSuHandle');
+  console.log("test2")
+  xSuHandle.style.left = (canvasPosition.left + window.scrollX + myChart.scales.x.getPixelForValue(0) - 10) + 'px'; // -10 for half of the handle width
+  xSuHandle.style.top = (canvasPosition.top + window.scrollY + myChart.scales.y.getPixelForValue(ySuL) - 10) + 'px'; // -10 for half of the handle height
+
 }
 
 positionHandles()
@@ -167,11 +176,13 @@ window.addEventListener('resize', function () {
 var xDeHandle = document.getElementById('xDeHandle');
 var yDeHandle = document.getElementById('yDeHandle');
 var ySuHandle = document.getElementById('ySuHandle');
-  
+var xSuHandle = document.getElementById('xSuHandle');
+
 var isDragging = false;
 var xDeDragging = false;
 var yDeDragging = false;
 var ySuUDragging = false;
+var xSuDragging = false;
 
 xDeHandle.addEventListener('mousedown', function(e) {
   //the handle drags when the mouse is pressed down
@@ -185,7 +196,11 @@ yDeHandle.addEventListener('mousedown', function (e) {
 });
 ySuHandle.addEventListener('mousedown', function (e) {
   isDragging = true;
-  ySuUDragging = true;
+  ySuDragging = true;
+});
+xSuHandle.addEventListener('mousedown', function (e) {
+  isDragging = true;
+  xSuDragging = true;
 });
 //add this for other handles!!!
 
@@ -215,17 +230,24 @@ window.addEventListener('mousemove', function(e) {
       console.log(xIn + " x")
       console.log(yIn + " y")
     }
-    if (ySuUDragging) {
+    if (ySuDragging) {
       ySuU = (myChart.scales.y.getValueForPixel(e.clientY - myChart.canvas.getBoundingClientRect().top)).toFixed(1);
       if (ySuU <= 0) {
         //sets min as 0
         ySuU = 0;
-
       }
       xSuU = (myChart.scales.x.getValueForPixel(e.clientX - myChart.canvas.getBoundingClientRect().left)).toFixed(1);
       if (xSuU <= 0) {
         //sets min as 0
         xSuU = 0;
+      }
+      if (xSuDragging) {
+        ySuL = (myChart.scales.y.getValueForPixel(e.clientY - myChart.canvas.getBoundingClientRect().top)).toFixed(1);
+        if (ySuL <= 0) {
+          //sets min as 0
+          ySuL = 0;
+
+        }
       }
     }
 
@@ -247,7 +269,10 @@ window.addEventListener('mouseup', function(e) {
   if (yDeDragging) {
     yDeDragging = false;
   }
-  if (ySuUDragging) {
-    ySuUDragging = false;
+  if (ySuDragging) {
+    ySuDragging = false;
+  }
+  if (xSuDragging) {
+    xSuDragging = false;
   }
 })
