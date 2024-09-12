@@ -1,10 +1,10 @@
 var ctx = document.getElementById('myChart').getContext('2d');
 //values when the lines are moved
-var xDe = 1
-var yDe = 1
-var xSuU = 1
-var ySuU = 1
-var ySuL = 0
+var xDe = 10;
+var yDe = 10;
+var xSuU = 10;
+var ySuU = 10;
+var ySuL = 0;
 
 // Function to recalculate x and y intersection values
 function recalculateIntersections() {
@@ -12,14 +12,13 @@ function recalculateIntersections() {
   //xIn = ((yDe / ((ySuU / xSuU)+(yDe / xDe))));
   //yIn = ((-(yDe) / xDe) * (yDe / ((ySuU / xSuU) + (yDe / xDe))) + yDe);
 
-  //when yDe moves yIn turns negative but i can't find why
-  //supply
-  xIn = ((((ySuU - ySuL) / xSuU) * ((yDe - ySuL) / (((ySuU - ySuL) / (xSuU)) + (yDe / xDe)))) + ySuL);
-  //demand
-  //this isn't equalling what it should when yDe moves
-  yIn = (((-(yDe) / xDe) * ((yDe - ySuL) / (((ySuU - ySuL) / (xSuU)) + (yDe / xDe)))) + yDe);
-  //yIn = (((-(yDe) / xDe) * xIn) + yDe); //edchat
+  //x intersect
+  xIn = (yDe - ySuL) / (((ySuU - ySuL) / xSuU) + (yDe / xDe));
 
+  //putting the x into an equation
+  //console.log("x:", xDe, "y:", yDe, "xIn:", xIn);
+  yIn = (-yDe / xDe) * xIn+yDe;
+  //console.log("yIn:",yIn)
 }
 recalculateIntersections();
 
@@ -32,7 +31,7 @@ function updateChartData(chart) {
   chart.data.datasets[1].data = [{x: 0, y: yDe}, {x: xDe, y: 0}];
   //the inbetween bit
   //function is the x and y intersects
-  chart.data.datasets[2].data = [{x: 0, y: 0}, {x:xIn, y:yIn}, {x: xDe, y: 0}];
+  chart.data.datasets[2].data = [{x: 0, y: ySuL}, {x:xIn, y:yIn}, {x: xDe, y: 0}];
   //x equilibrium
   chart.data.datasets[3].data = [{x: xIn, y: yIn}, {x: xIn, y: 0}];
   //y equiilibrium
@@ -125,17 +124,15 @@ updateChartData(myChart)
 //'handles' to move the lines
 function positionHandles() {
   var canvasPosition = myChart.canvas.getBoundingClientRect();
-
   //demand x handle
   var xDeHandle = document.getElementById('xDeHandle');
   //xDeHandle.style.left = canvasPosition.left +(myChart.scales.x.getPixelForValue(xDe) - 10) + 'px'; //-10 for half of the handle width
   //xDeHandle.style.top = canvasPosition.top + (myChart.scales.y.getPixelForValue(0) - 10) + 'px'; //-10 for half of the handle height
   xDeHandle.style.left = (canvasPosition.left + window.scrollX + myChart.scales.x.getPixelForValue(xDe) - 10) + 'px'; // -10 for half of the handle width
   xDeHandle.style.top = (canvasPosition.top + window.scrollY + myChart.scales.y.getPixelForValue(0) - 10) + 'px'; // -10 for half of the handle height
-  console.log("top " + canvasPosition.top)
-  console.log("scale " + (myChart.scales.y.getPixelForValue(0) - 10))
-  console.log("handle " + xDeHandle.style.top)
-
+  //console.log("top " + canvasPosition.top)
+  //console.log("scale " + (myChart.scales.y.getPixelForValue(0) - 10))
+  //console.log("handle " + xDeHandle.style.top)
 
   //demand y handle
   var yDeHandle = document.getElementById('yDeHandle');
@@ -152,13 +149,10 @@ function positionHandles() {
   //SuHandle.style.left = canvasPosition.left +(myChart.scales.x.getPixelForValue(xSuU) - 10) + 'px'; //-10 for half of the handle width
   //SuHandle.style.top = canvasPosition.top + (myChart.scales.y.getPixelForValue(ySuU) - 10) + 'px'; //-10 for half of the handle height
 
-  console.log("test")
   //supply x handle
   var xSuHandle = document.getElementById('xSuHandle');
-  console.log("test2")
   xSuHandle.style.left = (canvasPosition.left + window.scrollX + myChart.scales.x.getPixelForValue(0) - 10) + 'px'; // -10 for half of the handle width
   xSuHandle.style.top = (canvasPosition.top + window.scrollY + myChart.scales.y.getPixelForValue(ySuL) - 10) + 'px'; // -10 for half of the handle height
-
 }
 
 positionHandles()
@@ -181,7 +175,7 @@ var xSuHandle = document.getElementById('xSuHandle');
 var isDragging = false;
 var xDeDragging = false;
 var yDeDragging = false;
-var ySuUDragging = false;
+var ySuDragging = false;
 var xSuDragging = false;
 
 xDeHandle.addEventListener('mousedown', function(e) {
@@ -214,6 +208,9 @@ window.addEventListener('mousemove', function(e) {
         //sets min as 0
         xDe = 0;
       }
+      else {
+        xDe = parseFloat(xDe);
+      }
       console.log(xIn + " x")
       console.log(yIn + " y")
 
@@ -226,6 +223,9 @@ window.addEventListener('mousemove', function(e) {
         //sets min as 0
         yDe = 0;
       }
+      else {
+        yDe = parseFloat(yDe);
+      }
       console.log(yDe + " yDe", xDe + " xDe", xSuU + " xSuU", ySuU + " ySuU", ySuL + " ySuL");
       console.log(xIn + " x")
       console.log(yIn + " y")
@@ -236,18 +236,26 @@ window.addEventListener('mousemove', function(e) {
         //sets min as 0
         ySuU = 0;
       }
+      else {
+        ySuU = parseFloat(ySuU);
+      }
       xSuU = (myChart.scales.x.getValueForPixel(e.clientX - myChart.canvas.getBoundingClientRect().left)).toFixed(1);
       if (xSuU <= 0) {
         //sets min as 0
         xSuU = 0;
       }
-      if (xSuDragging) {
-        ySuL = (myChart.scales.y.getValueForPixel(e.clientY - myChart.canvas.getBoundingClientRect().top)).toFixed(1);
-        if (ySuL <= 0) {
-          //sets min as 0
-          ySuL = 0;
-
-        }
+      else {
+        xSuU = parseFloat(xSuU);
+      }
+    }
+    if (xSuDragging) {
+      ySuL = (myChart.scales.y.getValueForPixel(e.clientY - myChart.canvas.getBoundingClientRect().top)).toFixed(1);
+      if (ySuL <= 0) {
+        //sets min as 0
+        ySuL = 0;
+      }
+      else {
+        ySuL = parseFloat(ySuL);
       }
     }
 
