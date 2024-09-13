@@ -25,8 +25,9 @@ recalculateIntersections();
 function updateSummary() {
   document.getElementById("xDVal").innerHTML = xDe;
   document.getElementById("yDVal").innerHTML = yDe;
-  document.getElementById("xSVal").innerHTML = xSuU;
-  document.getElementById("ySVal").innerHTML = ySuL;
+  document.getElementById("xSUVal").innerHTML = xSuU;
+  document.getElementById("ySUVal").innerHTML = ySuU;
+  document.getElementById("ySLVal").innerHTML = ySuL;
   document.getElementById("xInVal").innerHTML = xIn.toFixed(3);
   document.getElementById("yInVal").innerHTML = yIn.toFixed(3);
   document.getElementById("xIVal").innerHTML = yIn.toFixed(3);
@@ -269,6 +270,7 @@ window.addEventListener('mousemove', function(e) {
       else {
         xSuU = parseFloat(xSuU);
       }
+      console.log("xSuU: ", xSuU, "ySuU: ", ySuU)
     }
     if (xSuDragging) {
       ySuL = (myChart.scales.y.getValueForPixel(e.clientY - myChart.canvas.getBoundingClientRect().top)).toFixed(1);

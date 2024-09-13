@@ -18,8 +18,11 @@ html {
   width: 23%;
   height: 40%;
   background-color: mediumvioletred;
+  padding-left: 10px; 
+  /*adding a space in the div so the writting's not on the edge*/
 
-  /*stopping the text from being highlighted when dragging the handles (also stopping highlighting in general*/
+  /*stopping the text from being highlighted when
+  dragging the handles (also stopping highlighting in general*/
   -webkit-user-select: none; /* Safari */
   -ms-user-select: none; /* IE 10 and IE 11 */
   user-select: none; /* Standard syntax */
