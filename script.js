@@ -24,6 +24,13 @@ recalculateIntersections();
 
 function updateSummary() {
   document.getElementById("xDVal").innerHTML = xDe;
+  document.getElementById("yDVal").innerHTML = yDe;
+  document.getElementById("xSVal").innerHTML = xSuU;
+  document.getElementById("ySVal").innerHTML = ySuL;
+  document.getElementById("xInVal").innerHTML = xIn.toFixed(3);
+  document.getElementById("yInVal").innerHTML = yIn.toFixed(3);
+  document.getElementById("xIVal").innerHTML = yIn.toFixed(3);
+
 }
 updateSummary();
 
@@ -100,7 +107,17 @@ var myChart = new Chart(ctx, {
       x: { //sets the x axis
         type: 'linear',
         position: 'bottom',
-      }  
+        title: {
+          display: true,
+          text: 'Quantity'
+        }
+      },
+      y: {
+        title: {
+          display: true,
+          text: 'Price'
+        }
+      }
     },
     elements: {
       line: {
