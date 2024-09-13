@@ -4,11 +4,21 @@ html {
 }
 /* !!# means id, . means class!! */
 
+.page-container {
+    display: flex;
+}
 .chart-container {
     position: relative;
     height: 60%;
     width: 80%;
 }
+.summary {
+    position: relative;
+    width: 25%;
+    height: 40%;
+    background-color: mediumvioletred;
+}
+
 
 /* for the handles */
 .drag-handle {

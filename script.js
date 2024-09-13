@@ -22,6 +22,10 @@ function recalculateIntersections() {
 }
 recalculateIntersections();
 
+function updateSummary() {
+  document.getElementById("xDVal").innerHTML = xDe;
+}
+updateSummary();
 
 function updateChartData(chart) {
   //updating the data point in the chart dataset
@@ -201,7 +205,8 @@ xSuHandle.addEventListener('mousedown', function (e) {
 window.addEventListener('mousemove', function(e) {
   //moves the handles when the mouse moves
   //toFixed means to the 1st decimal point (0 is none, 2 is 2nd etc)
-  if(isDragging) {
+  if (isDragging) {
+
     if(xDeDragging) {
       xDe = (myChart.scales.x.getValueForPixel(e.clientX - myChart.canvas.getBoundingClientRect().left)).toFixed(1);
       if (xDe <= 0) {
@@ -262,6 +267,7 @@ window.addEventListener('mousemove', function(e) {
     //add ***Dragging for the rest
     recalculateIntersections();
     updateChartData(myChart); //updated chart for all the drags
+    updateSummary();
     positionHandles(); //updates the handles
   }
 });

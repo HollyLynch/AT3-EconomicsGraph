@@ -12,10 +12,26 @@
 </head>
 
 <body>
-  <div class="chart-container">
+  <div class="page-container">
+    <div class="chart-container">
     <canvas id="myChart"></canvas>
-  </div>
+    </div>
   
+    <div class="summary">
+        <h1>Summary:</h1>
+        <h3>Demand Line:</h3>
+        <p>X-axis (lower) value: <b id="xDVal"></b></p>
+        <p>Y-axis (upper) value: <b id="yDVal"></b></p>
+        <h3>Supplu Lime:</h3>
+        <p>X-axis (lower) value: </p>
+        <p>Y-axis (upper) value: </p>
+        <h4>Intersect point: </h4>
+        <h3>Equilbrium:</h3>
+        <p>X-axis value: </p>
+        <p>Y-axis value: </p>
+
+    </div>
+  </div>
 
   <div id="xDeHandle", class="drag-handle"></div>
   <div id="yDeHandle", class="drag-handle"></div>
