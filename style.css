@@ -6,18 +6,23 @@ html {
 
 /*for the elements to be next to each other*/
 .page-container {
-    display: flex;
+  display: flex;
 }
 .chart-container {
-    position: relative;
-    height: 60%;
-    width: 77%;
+  position: relative;
+  height: 60%;
+  width: 77%;
 }
 .summary {
-    position: relative;
-    width: 23%;
-    height: 40%;
-    background-color: mediumvioletred;
+  position: relative;
+  width: 23%;
+  height: 40%;
+  background-color: mediumvioletred;
+
+  /*stopping the text from being highlighted when dragging the handles (also stopping highlighting in general*/
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
 }
 
 h1 {
@@ -42,5 +47,5 @@ h1 {
   background: #fa325d;
 }
 #xSuHandle {
-    background: #fa325d;
+  background: #fa325d;
 }
