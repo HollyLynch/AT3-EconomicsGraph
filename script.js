@@ -1,9 +1,12 @@
 var ctx = document.getElementById('myChart').getContext('2d');
 //values when the lines are moved
-var xDe = 10;
-var yDe = 10;
+var xDeL = 10;
+var yDeL = 0;
+var xDeU = 0;
+var yDeU = 10;
 var xSuU = 10;
 var ySuU = 10;
+var xSuL = 0;
 var ySuL = 0;
 
 // Function to recalculate x and y intersection values
@@ -13,24 +16,28 @@ function recalculateIntersections() {
   //yIn = ((-(yDe) / xDe) * (yDe / ((ySuU / xSuU) + (yDe / xDe))) + yDe);
 
   //x intersect
-  xIn = (yDe - ySuL) / (((ySuU - ySuL) / xSuU) + (yDe / xDe));
+  xIn = (yDeU - ySuL) / (((ySuU - ySuL) / xSuU) + (yDeU / xDeL));
+  //xIn = ((yDeL / xDeL) - ((yDeL - yDeU) / (xDeL - xDeU))) - ((ySuL / xSuL) - ((ySuU - ySuL) / (xSuU = xSuL))) / (((ySuU - ySuL) / (xSuU - xSuL)) + ((yDeL - yDeU) / (xDeL - xDeU)));
 
   //putting the x into an equation
-  //console.log("x:", xDe, "y:", yDe, "xIn:", xIn);
-  yIn = (-yDe / xDe) * xIn+yDe;
+  yIn = (-yDeU / xDeL) * xIn+yDeU;
+  //yIn = ((yDeL - yDeU) / (xDeL - xDeU)) * xIn + ((yDeL / xDeL) - ((yDeL - yDeU) / (xDeL - xDeU)));
   //console.log("yIn:",yIn)
 }
 recalculateIntersections();
 
 function updateSummary() {
-  document.getElementById("xDVal").innerHTML = xDe;
-  document.getElementById("yDVal").innerHTML = yDe;
-  document.getElementById("xSUVal").innerHTML = xSuU;
-  document.getElementById("ySUVal").innerHTML = ySuU;
+  document.getElementById("xDLVal").innerHTML = xDeL; //demand lower
+  document.getElementById("yDLVal").innerHTML = yDeL;
+  document.getElementById("xDUVal").innerHTML = xDeU; //demand upper
+  document.getElementById("yDUVal").innerHTML = yDeU;
+  document.getElementById("xSLVal").innerHTML = xSuL; //supply lower
   document.getElementById("ySLVal").innerHTML = ySuL;
-  document.getElementById("xInVal").innerHTML = xIn.toFixed(3);
+  document.getElementById("xSUVal").innerHTML = xSuU; //supply upper
+  document.getElementById("ySUVal").innerHTML = ySuU;
+  document.getElementById("xInVal").innerHTML = xIn.toFixed(3); //equilibrium
   document.getElementById("yInVal").innerHTML = yIn.toFixed(3);
-  document.getElementById("xIVal").innerHTML = yIn.toFixed(3);
+  document.getElementById("xIVal").innerHTML = yIn.toFixed(3); //intersect
 
 }
 updateSummary();
@@ -38,12 +45,12 @@ updateSummary();
 function updateChartData(chart) {
   //updating the data point in the chart dataset
   //supply line
-  chart.data.datasets[0].data = [{x: 0, y: ySuL}, {x: xSuU, y: ySuU}];
+  chart.data.datasets[0].data = [{x: xSuL, y: ySuL}, {x: xSuU, y: ySuU}];
   //demand line
-  chart.data.datasets[1].data = [{x: 0, y: yDe}, {x: xDe, y: 0}];
+  chart.data.datasets[1].data = [{x: xDeU, y: yDeU}, {x: xDeL, y: yDeL}];
   //the inbetween bit
   //function is the x and y intersects
-  chart.data.datasets[2].data = [{x: 0, y: ySuL}, {x:xIn, y:yIn}, {x: xDe, y: 0}];
+  chart.data.datasets[2].data = [{x: xSuL, y: ySuL}, {x:xIn, y:yIn}, {x: xDeL, y: yDeL}];
   //x equilibrium
   chart.data.datasets[3].data = [{x: xIn, y: yIn}, {x: xIn, y: 0}];
   //y equiilibrium
@@ -51,8 +58,8 @@ function updateChartData(chart) {
   chart.data.datasets[4].data = [{x: 0, y: yIn}, {x: xIn, y: yIn}];
 
   // Find the maximum x and y values among all datasets
-  let maxX = Math.max(xDe, xSuU, xIn) + 0.2; // Adding 0.2 for extra space
-  let maxY = Math.max(yDe, ySuU, ySuL, yIn) + 0.2; // Adding 0.2 for extra space
+  let maxX = Math.max(xDeL, xDeU, xSuL, xSuU, xIn) + 0.2; // Adding 0.2 for extra space
+  let maxY = Math.max(yDeL, yDeU, ySuU, ySuL, yIn) + 0.2; // Adding 0.2 for extra space
 
   // Update the axis limits
   chart.options.scales.x.min = 0;
@@ -71,36 +78,37 @@ var myChart = new Chart(ctx, {
   data: {
     datasets: [{ //setting each line
       label: 'Supply',
-      data: [{x: 0, y: 0}, {x: 1, y: 1}],
+      data: [{ x: 0, y: 0 }, { x: 1, y: 1 }],
       borderColor: "#ff6385",
       fill: false,
+      hidden: false,
     },
     {
       label: 'Demand',
-      data: [{x: 0, y: 1}, {x: 1, y: 0}],
+      data: [{ x: 0, y: 1 }, { x: 1, y: 0 }],
       borderColor: "#36a3eb",
       fill: false,
     },
     {
       label: 'S->D',
-      data: [{x: 0, y: ySuL}, {x: xIn, y: yIn}, {x: xDe, y: 0}],
+      data: [{ x: xSuL, y: ySuL }, { x: xIn, y: yIn }, { x: xDeL, y: yDeL }],
       borderColor: "#36a3eb", //so it blends in with the demand line
       fill: 'start',
     },
     {
       label: 'X-Equilibrium',
-      data: [{x: xIn, y: yIn}, {x: xIn, y: 0}],
+      data: [{ x: xIn, y: yIn }, { x: xIn, y: 0 }],
       borderColor: "black",
-      borderDash: [4,4],
+      borderDash: [4, 4],
       fill: false,
     },
-   {
-     label: 'Y-Equilibrium',
-     data: [{x: 0, y: yIn}, {x: xIn, y: yIn}],
-     borderColor: /*"black"*/ "red",
-     borderDash: [4,4],
-     fill: false,
-   }
+    {
+      label: 'Y-Equilibrium',
+      data: [{ x: 0, y: yIn }, { x: xIn, y: yIn }],
+      borderColor: /*"black"*/ "red",
+      borderDash: [4, 4],
+      fill: false,
+    }
               ]
   },
   options: {
@@ -141,7 +149,7 @@ var myChart = new Chart(ctx, {
   }
 });
 updateChartData(myChart)
-
+console.log(myChart)
 
 //'handles' to move the lines
 function positionHandles() {
@@ -150,8 +158,8 @@ function positionHandles() {
   var xDeHandle = document.getElementById('xDeHandle');
   //xDeHandle.style.left = canvasPosition.left +(myChart.scales.x.getPixelForValue(xDe) - 10) + 'px'; //-10 for half of the handle width
   //xDeHandle.style.top = canvasPosition.top + (myChart.scales.y.getPixelForValue(0) - 10) + 'px'; //-10 for half of the handle height
-  xDeHandle.style.left = (canvasPosition.left + window.scrollX + myChart.scales.x.getPixelForValue(xDe) - 10) + 'px'; // -10 for half of the handle width
-  xDeHandle.style.top = (canvasPosition.top + window.scrollY + myChart.scales.y.getPixelForValue(0) - 10) + 'px'; // -10 for half of the handle height
+  xDeHandle.style.left = (canvasPosition.left + window.scrollX + myChart.scales.x.getPixelForValue(xDeL) - 10) + 'px'; // -10 for half of the handle width
+  xDeHandle.style.top = (canvasPosition.top + window.scrollY + myChart.scales.y.getPixelForValue(yDeL) - 10) + 'px'; // -10 for half of the handle height
   //console.log("top " + canvasPosition.top)
   //console.log("scale " + (myChart.scales.y.getPixelForValue(0) - 10))
   //console.log("handle " + xDeHandle.style.top)
@@ -160,8 +168,8 @@ function positionHandles() {
   var yDeHandle = document.getElementById('yDeHandle');
   //yDeHandle.style.left = canvasPosition.left +(myChart.scales.x.getPixelForValue(0) - 10) + 'px'; //-10 for half of the handle width
   //yDeHandle.style.top = canvasPosition.top + (myChart.scales.y.getPixelForValue(yDe) - 10) + 'px'; //-10 for half of the handle height
-  yDeHandle.style.left = (canvasPosition.left + window.scrollX + myChart.scales.x.getPixelForValue(0) - 10) + 'px'; // -10 for half of the handle width
-  yDeHandle.style.top = (canvasPosition.top + window.scrollY + myChart.scales.y.getPixelForValue(yDe) - 10) + 'px'; // -10 for half of the handle height
+  yDeHandle.style.left = (canvasPosition.left + window.scrollX + myChart.scales.x.getPixelForValue(xDeU) - 10) + 'px'; // -10 for half of the handle width
+  yDeHandle.style.top = (canvasPosition.top + window.scrollY + myChart.scales.y.getPixelForValue(yDeU) - 10) + 'px'; // -10 for half of the handle height
  
 
   //supply y handle
@@ -173,7 +181,7 @@ function positionHandles() {
 
   //supply x handle
   var xSuHandle = document.getElementById('xSuHandle');
-  xSuHandle.style.left = (canvasPosition.left + window.scrollX + myChart.scales.x.getPixelForValue(0) - 10) + 'px'; // -10 for half of the handle width
+  xSuHandle.style.left = (canvasPosition.left + window.scrollX + myChart.scales.x.getPixelForValue(xSuL) - 10) + 'px'; // -10 for half of the handle width
   xSuHandle.style.top = (canvasPosition.top + window.scrollY + myChart.scales.y.getPixelForValue(ySuL) - 10) + 'px'; // -10 for half of the handle height
 }
 
@@ -226,30 +234,46 @@ window.addEventListener('mousemove', function(e) {
   if (isDragging) {
 
     if(xDeDragging) {
-      xDe = (myChart.scales.x.getValueForPixel(e.clientX - myChart.canvas.getBoundingClientRect().left)).toFixed(1);
-      if (xDe <= 0) {
+      xDeL = (myChart.scales.x.getValueForPixel(e.clientX - myChart.canvas.getBoundingClientRect().left)).toFixed(1);
+      if (xDeL <= 0) {
         //sets min as 0
-        xDe = 0;
+        xDeL = 0;
       }
       else {
-        xDe = parseFloat(xDe);
+        xDeL = parseFloat(xDeL);
+      }
+      yDeL = (myChart.scales.y.getValueForPixel(e.clientY - myChart.canvas.getBoundingClientRect().top)).toFixed(1);
+      if (yDeL <= 0) {
+        //sets min as 0
+        yDeL = 0;
+      }
+      else {
+        yDeL = parseFloat(yDeL);
       }
       console.log(xIn + " x")
       console.log(yIn + " y")
 
-      console.log(xDe);
+      console.log(xDeL);
       //updateChartData(myChart);
     }
     if(yDeDragging) {
-      yDe = (myChart.scales.y.getValueForPixel(e.clientY - myChart.canvas.getBoundingClientRect().top)).toFixed(1);
-      if (yDe <= 0) {
+      yDeU = (myChart.scales.y.getValueForPixel(e.clientY - myChart.canvas.getBoundingClientRect().top)).toFixed(1);
+      if (yDeU <= 0) {
         //sets min as 0
-        yDe = 0;
+        yDeU = 0;
       }
       else {
-        yDe = parseFloat(yDe);
+        yDeU = parseFloat(yDeU);
       }
-      console.log(yDe + " yDe", xDe + " xDe", xSuU + " xSuU", ySuU + " ySuU", ySuL + " ySuL");
+      xDeU = (myChart.scales.x.getValueForPixel(e.clientX - myChart.canvas.getBoundingClientRect().left)).toFixed(1);
+      if (xDeU <= 0) {
+        //sets min as 0
+        xDeU = 0;
+      }
+      else {
+        xDeU = parseFloat(xDeU);
+      }
+      console.log(yDeU + " yDe", xDeL + " xDe", xSuU + " xSuU", ySuU + " ySuU", ySuL + " ySuL");
       console.log(xIn + " x")
       console.log(yIn + " y")
     }
@@ -280,6 +304,14 @@ window.addEventListener('mousemove', function(e) {
       }
       else {
         ySuL = parseFloat(ySuL);
+      }
+      xSuL = (myChart.scales.x.getValueForPixel(e.clientX - myChart.canvas.getBoundingClientRect().left)).toFixed(1);
+      if (xSuL <= 0) {
+        //sets min as 0
+        xSuL = 0;
+      }
+      else {
+        xSuL = parseFloat(xSuL);
       }
     }
 
