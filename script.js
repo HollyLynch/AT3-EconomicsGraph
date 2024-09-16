@@ -16,28 +16,43 @@ function recalculateIntersections() {
   //yIn = ((-(yDe) / xDe) * (yDe / ((ySuU / xSuU) + (yDe / xDe))) + yDe);
 
   //x intersect
-  xIn = (yDeU - ySuL) / (((ySuU - ySuL) / xSuU) + (yDeU / xDeL));
+  //xIn = (yDeU - ySuL) / (((ySuU - ySuL) / xSuU) + (yDeU / xDeL));
   //xIn = ((yDeL / xDeL) - ((yDeL - yDeU) / (xDeL - xDeU))) - ((ySuL / xSuL) - ((ySuU - ySuL) / (xSuU = xSuL))) / (((ySuU - ySuL) / (xSuU - xSuL)) + ((yDeL - yDeU) / (xDeL - xDeU)));
 
   //putting the x into an equation
-  yIn = (-yDeU / xDeL) * xIn+yDeU;
+  //yIn = (-yDeU / xDeL) * xIn+yDeU;
   //yIn = ((yDeL - yDeU) / (xDeL - xDeU)) * xIn + ((yDeL / xDeL) - ((yDeL - yDeU) / (xDeL - xDeU)));
   //console.log("yIn:",yIn)
+
+  //demand line y=mx+c variables
+  mDe = (yDeL - yDeU) / (xDeL - xDeU);
+  cDe = yDeU - (mDe * xDeU);
+  //supply line y=mx+c variables
+  mSu = (ySuU - ySuL) / (xSuU - xSuL);
+  cSu = ySuL - (mSu * xSuL);
+  //x intersect (S=D)
+  xIn = (cDe - cSu) / (mSu - mDe);
+  //putting x into D
+  yIn = (mDe * xIn) + cDe;
+
+
 }
 recalculateIntersections();
 
 function updateSummary() {
-  document.getElementById("xDLVal").innerHTML = xDeL; //demand lower
-  document.getElementById("yDLVal").innerHTML = yDeL;
-  document.getElementById("xDUVal").innerHTML = xDeU; //demand upper
-  document.getElementById("yDUVal").innerHTML = yDeU;
-  document.getElementById("xSLVal").innerHTML = xSuL; //supply lower
-  document.getElementById("ySLVal").innerHTML = ySuL;
-  document.getElementById("xSUVal").innerHTML = xSuU; //supply upper
-  document.getElementById("ySUVal").innerHTML = ySuU;
+  document.getElementById("xDLVal").innerHTML = xDeL.toFixed(3); //demand lower
+  document.getElementById("yDLVal").innerHTML = yDeL.toFixed(3);
+  document.getElementById("xDUVal").innerHTML = xDeU.toFixed(3); //demand upper
+  document.getElementById("yDUVal").innerHTML = yDeU.toFixed(3);
+  document.getElementById("xSLVal").innerHTML = xSuL.toFixed(3); //supply lower
+  document.getElementById("ySLVal").innerHTML = ySuL.toFixed(3);
+  document.getElementById("xSUVal").innerHTML = xSuU.toFixed(3); //supply upper
+  document.getElementById("ySUVal").innerHTML = ySuU.toFixed(3);
   document.getElementById("xInVal").innerHTML = xIn.toFixed(3); //equilibrium
   document.getElementById("yInVal").innerHTML = yIn.toFixed(3);
-  document.getElementById("xIVal").innerHTML = yIn.toFixed(3); //intersect
+  document.getElementById("xIVal").innerHTML = xIn.toFixed(3); //intersect
+  document.getElementById("yIVal").innerHTML = yIn.toFixed(3); //intersect
+
 
 }
 updateSummary();
@@ -239,6 +254,9 @@ window.addEventListener('mousemove', function(e) {
         //sets min as 0
         xDeL = 0;
       }
+      else if (xDeL <= xIn){
+        xDeL = xIn;
+      }
       else {
         xDeL = parseFloat(xDeL);
       }
@@ -246,6 +264,9 @@ window.addEventListener('mousemove', function(e) {
       if (yDeL <= 0) {
         //sets min as 0
         yDeL = 0;
+      }
+      else if (yDeL >= yIn) {
+        yDeL = yIn;
       }
       else {
         yDeL = parseFloat(yDeL);
@@ -262,6 +283,9 @@ window.addEventListener('mousemove', function(e) {
         //sets min as 0
         yDeU = 0;
       }
+      else if (yDeU <= yIn) {
+        yDeU = yIn;
+      }
       else {
         yDeU = parseFloat(yDeU);
       }
@@ -270,6 +294,9 @@ window.addEventListener('mousemove', function(e) {
         //sets min as 0
         xDeU = 0;
       }
+      else if (xDeU >= xIn) {
+        xDeU = xIn;
+      }
       else {
         xDeU = parseFloat(xDeU);
       }
@@ -277,11 +304,14 @@ window.addEventListener('mousemove', function(e) {
       console.log(xIn + " x")
       console.log(yIn + " y")
     }
-    if (ySuDragging) {
+    if(ySuDragging) {
       ySuU = (myChart.scales.y.getValueForPixel(e.clientY - myChart.canvas.getBoundingClientRect().top)).toFixed(1);
       if (ySuU <= 0) {
         //sets min as 0
         ySuU = 0;
+      }
+      else if (ySuU <= yIn) {
+        ySuU = yIn;
       }
       else {
         ySuU = parseFloat(ySuU);
@@ -291,16 +321,22 @@ window.addEventListener('mousemove', function(e) {
         //sets min as 0
         xSuU = 0;
       }
+      else if (xSuU <= xIn) {
+        xSuU = xIn;
+      }
       else {
         xSuU = parseFloat(xSuU);
       }
       console.log("xSuU: ", xSuU, "ySuU: ", ySuU)
     }
-    if (xSuDragging) {
+    if(xSuDragging) {
       ySuL = (myChart.scales.y.getValueForPixel(e.clientY - myChart.canvas.getBoundingClientRect().top)).toFixed(1);
       if (ySuL <= 0) {
         //sets min as 0
         ySuL = 0;
+      }
+      else if (ySuL >= yIn) {
+        ySuL = yIn;
       }
       else {
         ySuL = parseFloat(ySuL);
@@ -309,6 +345,9 @@ window.addEventListener('mousemove', function(e) {
       if (xSuL <= 0) {
         //sets min as 0
         xSuL = 0;
+      }
+      else if (xSuL >= xIn) {
+        xSuL = xIn;
       }
       else {
         xSuL = parseFloat(xSuL);
