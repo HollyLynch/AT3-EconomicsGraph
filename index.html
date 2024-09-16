@@ -29,9 +29,14 @@
       <p> X-axis value: <b id="xInVal"></b></p>
       <p> Y-axis value: <b id="yInVal"></b></p>
       <h3> Intersect point: <b id="xIVal"></b>, <b id="yIVal"></b></h3>
-      <!--as s->d, xIn & yIn are the same value and s->d isn't a variable
-  xIn is used as it has had less chance of error in the past-->
     </div>
+  </div>
+
+  <div class="set-values">
+    <form action="javascript:setVal()">
+      <input type="number" id="xDeLVal" name="xDeLVal">
+      <button type="submit">submit</button>
+    </form>
   </div>
 
   <div id="xDeHandle", class="drag-handle"></div>

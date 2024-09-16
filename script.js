@@ -40,22 +40,31 @@ function recalculateIntersections() {
 recalculateIntersections();
 
 function updateSummary() {
-  document.getElementById("xDLVal").innerHTML = xDeL.toFixed(3); //demand lower
-  document.getElementById("yDLVal").innerHTML = yDeL.toFixed(3);
-  document.getElementById("xDUVal").innerHTML = xDeU.toFixed(3); //demand upper
-  document.getElementById("yDUVal").innerHTML = yDeU.toFixed(3);
-  document.getElementById("xSLVal").innerHTML = xSuL.toFixed(3); //supply lower
-  document.getElementById("ySLVal").innerHTML = ySuL.toFixed(3);
-  document.getElementById("xSUVal").innerHTML = xSuU.toFixed(3); //supply upper
-  document.getElementById("ySUVal").innerHTML = ySuU.toFixed(3);
+  document.getElementById("xDLVal").innerHTML = xDeL.toFixed(1); //demand lower
+  document.getElementById("yDLVal").innerHTML = yDeL.toFixed(1);
+  document.getElementById("xDUVal").innerHTML = xDeU.toFixed(1); //demand upper
+  document.getElementById("yDUVal").innerHTML = yDeU.toFixed(1);
+  document.getElementById("xSLVal").innerHTML = xSuL.toFixed(1); //supply lower
+  document.getElementById("ySLVal").innerHTML = ySuL.toFixed(1);
+  document.getElementById("xSUVal").innerHTML = xSuU.toFixed(1); //supply upper
+  document.getElementById("ySUVal").innerHTML = ySuU.toFixed(1);
   document.getElementById("xInVal").innerHTML = xIn.toFixed(3); //equilibrium
   document.getElementById("yInVal").innerHTML = yIn.toFixed(3);
   document.getElementById("xIVal").innerHTML = xIn.toFixed(3); //intersect
   document.getElementById("yIVal").innerHTML = yIn.toFixed(3); //intersect
-
-
 }
 updateSummary();
+
+function setVal() {
+  xDeL = xDeLVal;
+  //console.log(xDeL)
+  console.log(xDeLVal, "inout")
+  console.log(xDeL, "xdel")
+  recalculateIntersections();
+  updateChartData(myChart); //updated chart for all the drags
+  //updateSummary();
+  positionHandles(); //updates the handles
+}
 
 function updateChartData(chart) {
   //updating the data point in the chart dataset
@@ -70,7 +79,7 @@ function updateChartData(chart) {
   chart.data.datasets[3].data = [{x: xIn, y: yIn}, {x: xIn, y: 0}];
   //y equiilibrium
   //red
-  chart.data.datasets[4].data = [{x: 0, y: yIn}, {x: xIn, y: yIn}];
+  chart.data.datasets[4].data = [{ x: 0, y: yIn }, { x: xIn, y: yIn }];
 
   // Find the maximum x and y values among all datasets
   let maxX = Math.max(xDeL, xDeU, xSuL, xSuU, xIn) + 0.2; // Adding 0.2 for extra space
