@@ -56,15 +56,23 @@ function updateSummary() {
 updateSummary();
 
 function setVal() {
-  xDeL = xDeLVal;
-  //console.log(xDeL)
-  console.log(xDeLVal, "inout")
-  console.log(xDeL, "xdel")
+  document.getElementById("values-form").addEventListener("submit", function (event) {
+    event.preventDefault();
+    console.log("submitted");
+    let inputValue = document.getElementById("xDeLVal").innerHTML;
+    xDeL = inputValue;
+    console.log("updated", xDeL);
+    console.log(xDeL, "xdel")
+
+  })
+
   recalculateIntersections();
   updateChartData(myChart); //updated chart for all the drags
-  //updateSummary();
+  updateSummary();
   positionHandles(); //updates the handles
 }
+
+
 
 function updateChartData(chart) {
   //updating the data point in the chart dataset
@@ -389,3 +397,6 @@ window.addEventListener('mouseup', function(e) {
     xSuDragging = false;
   }
 })
+
+
+setVal();
