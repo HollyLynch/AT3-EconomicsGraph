@@ -162,7 +162,7 @@ var myChart = new Chart(ctx, {
   }
 });
 updateChartData(myChart)
-console.log(myChart)
+//console.log(myChart)
 
 //'handles' to move the lines
 function positionHandles() {
@@ -214,10 +214,7 @@ window.addEventListener('resize', function () {
 document.getElementById("values-form").addEventListener("submit", function (event) {
   event.preventDefault();
 
-  if (document.getElementById("xDeUVal").value != false) {
     xDeU = parseInt(document.getElementById("xDeUVal").value);
-  }
-  else {
     yDeU = parseInt(document.getElementById("yDeUVal").value);
     xDeL = parseInt(document.getElementById("xDeLVal").value);
     yDeL = parseInt(document.getElementById("yDeLVal").value);
@@ -225,10 +222,7 @@ document.getElementById("values-form").addEventListener("submit", function (even
     ySuL = parseInt(document.getElementById("ySuLVal").value);
     xSuU = parseInt(document.getElementById("xSuUVal").value);
     ySuU = parseInt(document.getElementById("ySuUVal").value);
-  }
   
-  
-
   //forces the variables to be at the equilbrium point and not below
   if (xDeU >= xIn) {
     xDeU = xIn;
@@ -263,6 +257,7 @@ document.getElementById("values-form").addEventListener("submit", function (even
 
 //resets all values
 function reset() {
+  //resets graph
   xDeL = 10;
   yDeL = 0;
   xDeU = 0;
@@ -271,6 +266,17 @@ function reset() {
   ySuU = 10;
   xSuL = 0;
   ySuL = 0;
+
+  //resets input defaults
+  document.getElementById("xDeLVal").value = 10;
+  document.getElementById("yDeLVal").value = 0;
+  document.getElementById("xDeUVal").value = 0;
+  document.getElementById("yDeUVal").value = 10;
+  document.getElementById("xSuLVal").value = 0;
+  document.getElementById("ySuLVal").value = 0;
+  document.getElementById("xSuUVal").value = 10;
+  document.getElementById("ySuUVal").value = 10;
+
 
   recalculateIntersections();
   updateChartData(myChart); //updated chart for all the drags

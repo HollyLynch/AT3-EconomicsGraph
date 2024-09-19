@@ -18,52 +18,55 @@
     </div>
   
     <div class="summary">
-      <h1><u> Summary:</u></h1>
-      <h3> Demand Line:</h3>
-      <p> Upper (left) value: <b id="xDUVal"></b>, <b id="yDUVal"></b></p>
-      <p> Lower (right) value: <b id="xDLVal"></b>, <b id="yDLVal"></b></p>
-      <h3> Supply Line:</h3>
-      <p> Lower (left) value: <b id="xSLVal"></b>, <b id="ySLVal"></b></p>
-      <p> Upper (right) value: <b id="xSUVal"></b>, <b id="ySUVal"></b></p>
-      <h3> Equilibrium:</h3>
-      <p> X-axis value: <b id="xInVal"></b></p>
-      <p> Y-axis value: <b id="yInVal"></b></p>
-      <h3> Intersect point: <b id="xIVal"></b>, <b id="yIVal"></b></h3>
+      <h1><u>Summary:</u></h1>
+      <h3>Demand Line:</h3>
+      <p>Upper (left) value: <b id="xDUVal"></b>, <b id="yDUVal"></b></p>
+      <p>Lower (right) value: <b id="xDLVal"></b>, <b id="yDLVal"></b></p>
+      <h3>Supply Line:</h3>
+      <p>Lower (left) value: <b id="xSLVal"></b>, <b id="ySLVal"></b></p>
+      <p>Upper (right) value: <b id="xSUVal"></b>, <b id="ySUVal"></b></p>
+      <h3>Equilibrium:</h3>
+      <p>X-axis value: <b id="xInVal"></b></p>
+      <p>Y-axis value: <b id="yInVal"></b></p>
+      <h3>Intersect point: <b id="xIVal"></b>, <b id="yIVal"></b></h3>
+      <!--<i>orrrrr</i>
+      <h3>Equilibrium:</h3>
+      <p><b id="xIVal"></b>, <b id="yIVal"></b></p>-->
       <button type="button" onclick="reset()">Reset to original</button>
 
-    </div>
-  </div>
+      <br>
 
-  <div class="set-values">
-    <form id="values-form">
+      <form id="values-form">
+        <h1><u> Set Values:</u></h1>
 
         <label>Demand line start point (left):</label><br>
         <label for="xDeUVal">X:</label>
-        <input type="number" id="xDeUVal" name="xDeUVal" min="0" value="4" required>
+        <input type="number" id="xDeUVal" name="xDeUVal" min="0" value="0" required>
         <label for="yDeUVal">Y:</label>
-        <input type="number" id="yDeUVal" name="yDeUVal" min="0"> <br><br>
+        <input type="number" id="yDeUVal" name="yDeUVal" min="0" value="10" required> <br><br>
 
         <label>Demand line end point (right):</label><br>
         <label for="xDeLVal">X:</label>
-        <input type="number" id="xDeLVal" name="xDeLVal" min="0">
+        <input type="number" id="xDeLVal" name="xDeLVal" min="0" value="10" required>
         <label for="yDeLVal">Y:</label>
-        <input type="number" id="yDeLVal" name="yDeLVal" min="0"> <br><br>
-      
+        <input type="number" id="yDeLVal" name="yDeLVal" min="0" value="0" required> <br><br>
+
         <label>Supply line start point (left):</label><br>
         <label for="xSuLVal">X:</label>
-        <input type="number" id="xSuLVal" name="xSuLVal" min="0">
+        <input type="number" id="xSuLVal" name="xSuLVal" min="0" value="0" required>
         <label for="ySuLVal">Y:</label>
-        <input type="number" id="ySuLVal" name="ySuLVal" min="0"> <br><br>
+        <input type="number" id="ySuLVal" name="ySuLVal" min="0" value="0" required> <br><br>
 
         <label>Supply line end point (right):</label><br>
         <label for="xSuUVal">X:</label>
-        <input type="number" id="xSuUVal" name="xSuUVal" min="0">
+        <input type="number" id="xSuUVal" name="xSuUVal" min="0" value="10" required>
         <label for="ySuUVal">Y:</label>
-        <input type="number" id="ySuUVal" name="ySuUVal"min="0"> <br><br>
+        <input type="number" id="ySuUVal" name="ySuUVal" min="0" value="10" required> <br><br>
 
-        <input type="submit" value="submit">
+        <input type="submit" value="Submit">
         <br>
-    </form>
+      </form>
+    </div>
   </div>
 
   <div id="xDeHandle", class="drag-handle"></div>
