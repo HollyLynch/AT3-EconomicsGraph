@@ -12,9 +12,11 @@ html {
   position: relative;
   height: 60%;
   width: 77%;
+/*  background-color: greenyellow;*/
 }
 .summary {
   position: relative;
+  right: 0;
   width: 23%;
   height: 40%;
   background-color: mediumvioletred;
@@ -27,7 +29,24 @@ html {
   -ms-user-select: none; /* IE 10 and IE 11 */
   user-select: none; /* Standard syntax */
 }
+.set-values {
+  position: relative;
+  background-color: aquamarine;
+  width: 70%;
+  display: flex;
+  /*stopping the text from being highlighted when
+  dragging the handles (also stopping highlighting in general*/
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+}
 
+input {
+  width: 90px;
+}
+label {
+  padding-left: 6px;
+}
 h1 {
     font-size: 23px;
 }

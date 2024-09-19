@@ -55,25 +55,6 @@ function updateSummary() {
 }
 updateSummary();
 
-function setVal() {
-  document.getElementById("values-form").addEventListener("submit", function (event) {
-    event.preventDefault();
-    console.log("submitted");
-    let inputValue = document.getElementById("xDeLVal").innerHTML;
-    xDeL = inputValue;
-    console.log("updated", xDeL);
-    console.log(xDeL, "xdel")
-
-  })
-
-  recalculateIntersections();
-  updateChartData(myChart); //updated chart for all the drags
-  updateSummary();
-  positionHandles(); //updates the handles
-}
-
-
-
 function updateChartData(chart) {
   //updating the data point in the chart dataset
   //supply line
@@ -228,6 +209,75 @@ window.addEventListener('resize', function () {
   positionHandles(); // Update handle positions after resizing the chart
 
 });
+
+//values form listener
+document.getElementById("values-form").addEventListener("submit", function (event) {
+  event.preventDefault();
+
+  if (document.getElementById("xDeUVal").value != false) {
+    xDeU = parseInt(document.getElementById("xDeUVal").value);
+  }
+  else {
+    yDeU = parseInt(document.getElementById("yDeUVal").value);
+    xDeL = parseInt(document.getElementById("xDeLVal").value);
+    yDeL = parseInt(document.getElementById("yDeLVal").value);
+    xSuL = parseInt(document.getElementById("xSuLVal").value);
+    ySuL = parseInt(document.getElementById("ySuLVal").value);
+    xSuU = parseInt(document.getElementById("xSuUVal").value);
+    ySuU = parseInt(document.getElementById("ySuUVal").value);
+  }
+  
+  
+
+  //forces the variables to be at the equilbrium point and not below
+  if (xDeU >= xIn) {
+    xDeU = xIn;
+  }
+  if (yDeU <= yIn) {
+    yDeU = yIn;
+  }
+  if (xDeL <= xIn) {
+    xDeL = xIn;
+  }
+  if (yDeL >= yIn) {
+    yDeL = yIn;
+  }
+  if (xSuU <= xIn) {
+    xSuU = xIn;
+  }
+  if (ySuU <= yIn) {
+    ySuU = yIn;
+  }
+  if (xSuL >= xIn) {
+    xSuL = xIn;
+  }
+  if (ySuL >= yIn) {
+    ySuL = yIn;
+  }
+
+  recalculateIntersections();
+  updateChartData(myChart); //updated chart for all the drags
+  updateSummary();
+  positionHandles(); //updates the handles
+});
+
+//resets all values
+function reset() {
+  xDeL = 10;
+  yDeL = 0;
+  xDeU = 0;
+  yDeU = 10;
+  xSuU = 10;
+  ySuU = 10;
+  xSuL = 0;
+  ySuL = 0;
+
+  recalculateIntersections();
+  updateChartData(myChart); //updated chart for all the drags
+  updateSummary();
+  positionHandles(); //updates the handles
+}
+
 
 var xDeHandle = document.getElementById('xDeHandle');
 var yDeHandle = document.getElementById('yDeHandle');
@@ -398,5 +448,3 @@ window.addEventListener('mouseup', function(e) {
   }
 })
 
-
-setVal();

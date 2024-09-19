@@ -29,13 +29,40 @@
       <p> X-axis value: <b id="xInVal"></b></p>
       <p> Y-axis value: <b id="yInVal"></b></p>
       <h3> Intersect point: <b id="xIVal"></b>, <b id="yIVal"></b></h3>
+      <button type="button" onclick="reset()">Reset to original</button>
+
     </div>
   </div>
 
   <div class="set-values">
     <form id="values-form">
-      <input type="number" id="xDeLVal" name="xDeLVal">
-      <input type="submit" value="submit">
+
+        <label>Demand line start point (left):</label><br>
+        <label for="xDeUVal">X:</label>
+        <input type="number" id="xDeUVal" name="xDeUVal" min="0" value="4" required>
+        <label for="yDeUVal">Y:</label>
+        <input type="number" id="yDeUVal" name="yDeUVal" min="0"> <br><br>
+
+        <label>Demand line end point (right):</label><br>
+        <label for="xDeLVal">X:</label>
+        <input type="number" id="xDeLVal" name="xDeLVal" min="0">
+        <label for="yDeLVal">Y:</label>
+        <input type="number" id="yDeLVal" name="yDeLVal" min="0"> <br><br>
+      
+        <label>Supply line start point (left):</label><br>
+        <label for="xSuLVal">X:</label>
+        <input type="number" id="xSuLVal" name="xSuLVal" min="0">
+        <label for="ySuLVal">Y:</label>
+        <input type="number" id="ySuLVal" name="ySuLVal" min="0"> <br><br>
+
+        <label>Supply line end point (right):</label><br>
+        <label for="xSuUVal">X:</label>
+        <input type="number" id="xSuUVal" name="xSuUVal" min="0">
+        <label for="ySuUVal">Y:</label>
+        <input type="number" id="ySuUVal" name="ySuUVal"min="0"> <br><br>
+
+        <input type="submit" value="submit">
+        <br>
     </form>
   </div>
 
