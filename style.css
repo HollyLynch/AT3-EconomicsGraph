@@ -10,15 +10,15 @@ html {
 }
 .chart-container {
   position: relative;
-  height: 60%;
-  width: 77%;
+  height: 90%;
+  width: 65%;
 /*  background-color: greenyellow;*/
 }
 .summary {
   position: relative;
   right: 0;
-  width: 23%;
-  height: 40%;
+  width: 18%;
+  height: 50%;
   background-color: mediumvioletred;
   padding-left: 10px; 
   /*adding a space in the div so the writting's not on the edge*/
@@ -32,8 +32,11 @@ html {
 .set-values {
   position: relative;
   background-color: aquamarine;
-  width: 70%;
+  padding-left: 10px;
+  width: 18%;
+  height: 50%;
   display: flex;
+
   /*stopping the text from being highlighted when
   dragging the handles (also stopping highlighting in general*/
   -webkit-user-select: none; /* Safari */

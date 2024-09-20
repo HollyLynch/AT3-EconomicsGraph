@@ -70,6 +70,8 @@ function updateChartData(chart) {
   //red
   chart.data.datasets[4].data = [{ x: 0, y: yIn }, { x: xIn, y: yIn }];
 
+  chart.data.datasets[5].data = [{ x: xDeU, y: yDeU }, { x: xIn, y: yIn }, { x: 0, y: yIn }, { x: 0, y: yDeU }];
+  chart.data.datasets[6].data = [{ x: 0, y: yDeU }, { x: xDeU, y: yDeU }, { x: xIn, y: yIn }];
   // Find the maximum x and y values among all datasets
   let maxX = Math.max(xDeL, xDeU, xSuL, xSuU, xIn) + 0.2; // Adding 0.2 for extra space
   let maxY = Math.max(yDeL, yDeU, ySuU, ySuL, yIn) + 0.2; // Adding 0.2 for extra space
@@ -114,6 +116,7 @@ var myChart = new Chart(ctx, {
       borderColor: "black",
       borderDash: [4, 4],
       fill: false,
+      backgroundColor: "pink",
     },
     {
       label: 'Y-Equilibrium',
@@ -121,7 +124,21 @@ var myChart = new Chart(ctx, {
       borderColor: /*"black"*/ "red",
       borderDash: [4, 4],
       fill: false,
-    }
+    },
+    {
+      label: 'C-surplus',
+      data: [{ x: xDeU, y: yDeU }, { x: xIn, y: yIn }, { x: 0, y: yIn }, { x: 0, y: yDeU }],
+      borderColor: "pink",
+      fill: false,
+      backgroundColor: "blue",
+      },
+    {
+      label: 'C-surplus2',
+      data: [{ x: 0, y: yDeU }, { x: xDeU, y: yDeU }, { x: xIn, y: yIn }],
+      borderColor: "yellow",
+      fill: "-1",
+      backgroundColor: "blue",
+      }
               ]
   },
   options: {
