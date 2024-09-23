@@ -23,6 +23,7 @@ html {
   padding-left: 10px; 
   /*adding a space in the div so the writting's not on the edge*/
 
+/*from w3schools*/
   /*stopping the text from being highlighted when
   dragging the handles (also stopping highlighting in general*/
   -webkit-user-select: none; /* Safari */
@@ -37,6 +38,7 @@ html {
   height: 50%;
   display: flex;
 
+/*from w3schools*/
   /*stopping the text from being highlighted when
   dragging the handles (also stopping highlighting in general*/
   -webkit-user-select: none; /* Safari */
@@ -44,6 +46,7 @@ html {
   user-select: none; /* Standard syntax */
 }
 
+/*from stackoverflow.com*/
 /*stops the input boxes from highlighting*/
 input::selection {
   background: transparent;
@@ -81,5 +84,17 @@ h1 {
   background: #fa325d;
 }
 #xSuHandle {
+  background: #fa325d;
+}
+#axDeHandle {
+  background: #157dc2;
+}
+#ayDeHandle {
+  background: #157dc2;
+}
+#aySuHandle {
+  background: #fa325d;
+}
+#axSuHandle {
   background: #fa325d;
 }
