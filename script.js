@@ -1,29 +1,27 @@
 var ctx = document.getElementById('myChart').getContext('2d');
 //values when the lines are moved
-var xDeL = 10;
+var xDeL = 10; //x demand lower
 var yDeL = 0;
-var xDeU = 0;
+var xDeU = 0; //x demand upper
 var yDeU = 10;
-var xSuU = 10;
+var xSuU = 10; //x supply upper
 var ySuU = 10;
-var xSuL = 0;
+var xSuL = 0; //x supply lower
 var ySuL = 0;
+
+//delete for stage 8
+var axDeL = 8; //extra x demand lower
+var ayDeL = 0;
+var axDeU = 0; //extra x demand upper
+var ayDeU = 8;
+var axSuU = 10; //extra x supply upper
+var aySuU = 8;
+var axSuL = 2; //extra x supply lower
+var aySuL = 0;
+
 
 // Function to recalculate x and y intersection values
 function recalculateIntersections() {
-  //yIn is the demand linear equation
-  //xIn = ((yDe / ((ySuU / xSuU)+(yDe / xDe))));
-  //yIn = ((-(yDe) / xDe) * (yDe / ((ySuU / xSuU) + (yDe / xDe))) + yDe);
-
-  //x intersect
-  //xIn = (yDeU - ySuL) / (((ySuU - ySuL) / xSuU) + (yDeU / xDeL));
-  //xIn = ((yDeL / xDeL) - ((yDeL - yDeU) / (xDeL - xDeU))) - ((ySuL / xSuL) - ((ySuU - ySuL) / (xSuU = xSuL))) / (((ySuU - ySuL) / (xSuU - xSuL)) + ((yDeL - yDeU) / (xDeL - xDeU)));
-
-  //putting the x into an equation
-  //yIn = (-yDeU / xDeL) * xIn+yDeU;
-  //yIn = ((yDeL - yDeU) / (xDeL - xDeU)) * xIn + ((yDeL / xDeL) - ((yDeL - yDeU) / (xDeL - xDeU)));
-  //console.log("yIn:",yIn)
-
   //demand line y=mx+c variables
   mDe = (yDeL - yDeU) / (xDeL - xDeU);
   cDe = yDeU - (mDe * xDeU);
@@ -34,8 +32,6 @@ function recalculateIntersections() {
   xIn = (cDe - cSu) / (mSu - mDe);
   //putting x into D
   yIn = (mDe * xIn) + cDe;
-
-
 }
 recalculateIntersections();
 
@@ -63,16 +59,25 @@ function updateChartData(chart) {
   chart.data.datasets[1].data = [{x: xDeU, y: yDeU}, {x: xDeL, y: yDeL}];
   //the inbetween bit
   //function is the x and y intersects
-  chart.data.datasets[2].data = [{x: xSuL, y: ySuL}, {x:xIn, y:yIn}, {x: xDeL, y: yDeL}];
+  chart.data.datasets[2].data = [{ x: xSuL, y: ySuL }, { x: xIn, y: yIn }, { x: xDeL, y: yDeL }];
+
+  //delete for stage 8
+  //additional supply line
+  chart.data.datasets[3].data = [{ x: axSuL, y: aySuL }, { x: axSuU, y: aySuU }];
+  //addtional demand line
+  chart.data.datasets[4].data = [{ x: axDeU, y: ayDeU }, { x: axDeL, y: ayDeL }];
+
   //x equilibrium
-  chart.data.datasets[3].data = [{x: xIn, y: yIn}, {x: xIn, y: 0}];
+  chart.data.datasets[5].data = [{x: xIn, y: yIn}, {x: xIn, y: 0}];
   //y equiilibrium
   //red
-  chart.data.datasets[4].data = [{ x: 0, y: yIn }, { x: xIn, y: yIn }];
+  chart.data.datasets[6].data = [{ x: 0, y: yIn }, { x: xIn, y: yIn }];
 
-  //chart.data.datasets[5].data = [{ x: xDeU, y: yDeU }, { x: xIn, y: yIn }, { x: 0, y: yIn }, { x: 0, y: yDeU }];
-  //chart.data.datasets[6].data = [{ x: 0, y: yDeU }, { x: xDeU, y: yDeU }, { x: xIn, y: yIn }];
-  chart.data.datasets[5].data = [{ x: 0, y: yDeU }, { x: xDeU, y: yDeU }, { x: xIn, y: yIn }, { x: 0, y: yIn }];
+  //delete for stage 8
+  //consumer surplus
+  chart.data.datasets[7].data = [{ x: 0, y: yDeU }, { x: xDeU, y: yDeU }, { x: xIn, y: yIn }];
+  //producer surplus
+  chart.data.datasets[8].data = [{ x: 0, y: ySuL }, { x: xSuL, y: ySuL }, { x: xIn, y: yIn }];
 
   // Find the maximum x and y values among all datasets
   let maxX = Math.max(xDeL, xDeU, xSuL, xSuU, xIn) + 0.2; // Adding 0.2 for extra space
@@ -95,22 +100,40 @@ var myChart = new Chart(ctx, {
   data: {
     datasets: [{ //setting each line
       label: 'Supply',
-      data: [{ x: 0, y: 0 }, { x: 1, y: 1 }],
+      data: [{ x: xSuL, y: ySuL }, { x: xSuU, y: ySuU }],
       borderColor: "#ff6385",
       fill: false,
+      backgroundColor: "#ff6385",
       hidden: false,
     },
     {
       label: 'Demand',
-      data: [{ x: 0, y: 1 }, { x: 1, y: 0 }],
+      data: [{ x: xDeU, y: yDeU }, { x: xDeL, y: yDeL }],
       borderColor: "#36a3eb",
       fill: false,
+      backgroundColor: "#36a3eb",
     },
     {
       label: 'S->D',
       data: [{ x: xSuL, y: ySuL }, { x: xIn, y: yIn }, { x: xDeL, y: yDeL }],
       borderColor: "#36a3eb", //so it blends in with the demand line
       fill: 'start',
+    },
+    {//delete for stage 8
+      label: 'supply2',
+      data: [{ x: axSuL, y: aySuL }, { x: axSuU, y: aySuU }],
+      borderColor: "#ff2937",
+      fill: false,
+      backgroundColor: "#ff2937",
+      hidden: true,
+    },
+    {//delete for stage 8
+      label: 'demand2',
+      data: [{ x: axDeU, y: ayDeU }, { x: axDeL, y: ayDeL }],
+      borderColor: "#236af7",
+      fill: false,
+      backgroundColor: "#236af7",
+      hidden: true,
     },
     {
       label: 'X-Equilibrium',
@@ -127,28 +150,20 @@ var myChart = new Chart(ctx, {
       borderDash: [4, 4],
       fill: false,
     },
-    //{
-    //  label: 'C-surplus',
-    //  data: [{ x: xDeU, y: yDeU }, { x: xIn, y: yIn }, { x: 0, y: yIn }, { x: 0, y: yDeU }],
-    //  borderColor: "pink",
-    //  fill: false,
-    //  backgroundColor: "blue",
-    //  },
-    //{
-    //  label: 'C-surplus2',
-    //  data: [{ x: 0, y: yDeU }, { x: xDeU, y: yDeU }, { x: xIn, y: yIn }],
-    //  borderColor: "yellow",
-    //  fill: "-1",
-    //  backgroundColor: "blue",
-    //  },
-      {
-        label: 'surplus',
-        data: [{ x: 0, y: yDeU }, { x: xDeU, y: yDeU }, { x: xIn, y: yIn }, { x: 0, y: yIn }],
-        borderColor: "orange",
-        fill: true,
-        backgroundColor: "orange",
-        showLine: true, // Show the connecting lines
-      }
+    {//delete for stage 8
+      label: 'Consumer Surplus',
+      data: [{ x: 0, y: yDeU }, { x: xDeU, y: yDeU }, { x: xIn, y: yIn }],
+      borderColor: "#ffa742",
+      fill: "-1", //fills to the one before (y-equilibrium)
+      backgroundColor: "#ffa742",
+    },
+      {//delete for stage 8
+      label: 'Producer Surplus',
+      data: [{ x: 0, y: ySuL }, { x: xSuL, y: ySuL }, { x: xIn, y: yIn }],
+      borderColor: "#a3ff75",
+      fill: "-2", //fill to 2 before (y-equilibrium)
+      backgroundColor: "#a3ff75",
+    }
               ]
   },
   options: {
@@ -196,18 +211,11 @@ function positionHandles() {
   var canvasPosition = myChart.canvas.getBoundingClientRect();
   //demand x handle
   var xDeHandle = document.getElementById('xDeHandle');
-  //xDeHandle.style.left = canvasPosition.left +(myChart.scales.x.getPixelForValue(xDe) - 10) + 'px'; //-10 for half of the handle width
-  //xDeHandle.style.top = canvasPosition.top + (myChart.scales.y.getPixelForValue(0) - 10) + 'px'; //-10 for half of the handle height
   xDeHandle.style.left = (canvasPosition.left + window.scrollX + myChart.scales.x.getPixelForValue(xDeL) - 10) + 'px'; // -10 for half of the handle width
   xDeHandle.style.top = (canvasPosition.top + window.scrollY + myChart.scales.y.getPixelForValue(yDeL) - 10) + 'px'; // -10 for half of the handle height
-  //console.log("top " + canvasPosition.top)
-  //console.log("scale " + (myChart.scales.y.getPixelForValue(0) - 10))
-  //console.log("handle " + xDeHandle.style.top)
 
   //demand y handle
   var yDeHandle = document.getElementById('yDeHandle');
-  //yDeHandle.style.left = canvasPosition.left +(myChart.scales.x.getPixelForValue(0) - 10) + 'px'; //-10 for half of the handle width
-  //yDeHandle.style.top = canvasPosition.top + (myChart.scales.y.getPixelForValue(yDe) - 10) + 'px'; //-10 for half of the handle height
   yDeHandle.style.left = (canvasPosition.left + window.scrollX + myChart.scales.x.getPixelForValue(xDeU) - 10) + 'px'; // -10 for half of the handle width
   yDeHandle.style.top = (canvasPosition.top + window.scrollY + myChart.scales.y.getPixelForValue(yDeU) - 10) + 'px'; // -10 for half of the handle height
  
@@ -216,8 +224,6 @@ function positionHandles() {
   var ySuHandle = document.getElementById('ySuHandle');
   ySuHandle.style.left = (canvasPosition.left + window.scrollX + myChart.scales.x.getPixelForValue(xSuU) - 10) + 'px'; // -10 for half of the handle width
   ySuHandle.style.top = (canvasPosition.top + window.scrollY + myChart.scales.y.getPixelForValue(ySuU) - 10) + 'px'; // -10 for half of the handle height
-  //SuHandle.style.left = canvasPosition.left +(myChart.scales.x.getPixelForValue(xSuU) - 10) + 'px'; //-10 for half of the handle width
-  //SuHandle.style.top = canvasPosition.top + (myChart.scales.y.getPixelForValue(ySuU) - 10) + 'px'; //-10 for half of the handle height
 
   //supply x handle
   var xSuHandle = document.getElementById('xSuHandle');
@@ -327,7 +333,6 @@ xDeHandle.addEventListener('mousedown', function(e) {
   //the handle drags when the mouse is pressed down
   isDragging = true;
   xDeDragging = true;
-  // console.log("dragging");
 });
 yDeHandle.addEventListener('mousedown', function (e) {
   isDragging = true;
@@ -371,11 +376,6 @@ window.addEventListener('mousemove', function(e) {
       else {
         yDeL = parseFloat(yDeL);
       }
-      console.log(xIn + " x")
-      console.log(yIn + " y")
-
-      console.log(xDeL);
-      //updateChartData(myChart);
     }
     if(yDeDragging) {
       yDeU = (myChart.scales.y.getValueForPixel(e.clientY - myChart.canvas.getBoundingClientRect().top)).toFixed(1);
@@ -400,9 +400,6 @@ window.addEventListener('mousemove', function(e) {
       else {
         xDeU = parseFloat(xDeU);
       }
-      console.log(yDeU + " yDe", xDeL + " xDe", xSuU + " xSuU", ySuU + " ySuU", ySuL + " ySuL");
-      console.log(xIn + " x")
-      console.log(yIn + " y")
     }
     if(ySuDragging) {
       ySuU = (myChart.scales.y.getValueForPixel(e.clientY - myChart.canvas.getBoundingClientRect().top)).toFixed(1);
@@ -427,7 +424,6 @@ window.addEventListener('mousemove', function(e) {
       else {
         xSuU = parseFloat(xSuU);
       }
-      console.log("xSuU: ", xSuU, "ySuU: ", ySuU)
     }
     if(xSuDragging) {
       ySuL = (myChart.scales.y.getValueForPixel(e.clientY - myChart.canvas.getBoundingClientRect().top)).toFixed(1);
@@ -465,7 +461,6 @@ window.addEventListener('mousemove', function(e) {
 window.addEventListener('mouseup', function(e) {
   if (isDragging) {
     isDragging = false;
-    // console.log("not dragging");
   }
   if (xDeDragging) {
     xDeDragging = false;

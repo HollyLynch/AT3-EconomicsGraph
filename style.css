@@ -37,13 +37,21 @@ html {
   height: 50%;
   display: flex;
 
-  input::selection { background: transparent; } input::-moz-selection { background: transparent; }
   /*stopping the text from being highlighted when
   dragging the handles (also stopping highlighting in general*/
   -webkit-user-select: none; /* Safari */
   -ms-user-select: none; /* IE 10 and IE 11 */
   user-select: none; /* Standard syntax */
 }
+
+/*stops the input boxes from highlighting*/
+input::selection {
+  background: transparent;
+}
+input::-moz-selection {
+  background: transparent;
+}
+
 
 input {
   width: 70px;
