@@ -20,7 +20,8 @@ html {
   width: 18%;
   height: 50%;
   background-color: mediumvioletred;
-  padding-left: 10px; 
+  padding-left: 8px; 
+  padding-right: 6px;
   /*adding a space in the div so the writting's not on the edge*/
 
 /*from w3schools*/
@@ -33,12 +34,12 @@ html {
 .set-values {
   position: relative;
   background-color: aquamarine;
-  padding-left: 10px;
+  padding-left: 8px;
+  padding-right: 6px;
   width: 18%;
   height: 50%;
   display: flex;
-
-/*from w3schools*/
+  /*from w3schools*/
   /*stopping the text from being highlighted when
   dragging the handles (also stopping highlighting in general*/
   -webkit-user-select: none; /* Safari */
@@ -58,6 +59,13 @@ input::-moz-selection {
 
 input {
   width: 70px;
+
+  /*from w3schools*/
+  /*stopping the text from being highlighted when
+  dragging the handles (also stopping highlighting in general*/
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
 }
 label {
   padding-left: 6px;

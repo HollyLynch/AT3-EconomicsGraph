@@ -18,7 +18,6 @@ var aySuU = 8;
 var axSuL = 2; //extra x supply lower
 var aySuL = 0;
 
-
 // Function to recalculate x and y intersection values
 function recalculateIntersections() {
   //demand line y=mx+c variables
@@ -56,8 +55,7 @@ function updateChartData(chart) {
   chart.data.datasets[0].data = [{ x: xSuL, y: ySuL }, { x: xSuU, y: ySuU }];
   //demand line
   chart.data.datasets[1].data = [{ x: xDeU, y: yDeU }, { x: xDeL, y: yDeL }];
-  //the inbetween bit
-  //function is the x and y intersects
+  //function is the x and y intersects (S->D)
   chart.data.datasets[2].data = [{ x: xSuL, y: ySuL }, { x: xIn, y: yIn }, { x: xDeL, y: yDeL }];
 
   //additional supply line
@@ -76,11 +74,9 @@ function updateChartData(chart) {
   //producer surplus
   chart.data.datasets[8].data = [{ x: 0, y: ySuL }, { x: xSuL, y: ySuL }, { x: xIn, y: yIn }];
 
-
-
   // Find the maximum x and y values among all datasets
-  let maxX = Math.max(xDeL, xDeU, xSuL, xSuU, xIn) + 0.2; // Adding 0.2 for extra space
-  let maxY = Math.max(yDeL, yDeU, ySuU, ySuL, yIn) + 0.2; // Adding 0.2 for extra space
+  let maxX = Math.max(xDeL, xDeU, xSuL, xSuU, xIn, axDeL, axDeU, axSuL, axSuU) + 0.2; // Adding 0.2 for extra space
+  let maxY = Math.max(yDeL, yDeU, ySuU, ySuL, yIn, ayDeL, ayDeU, aySuL, aySuU) + 0.2; // Adding 0.2 for extra space
 
   // Update the axis limits
   chart.options.scales.x.min = 0;
@@ -92,6 +88,67 @@ function updateChartData(chart) {
   
   chart.update() //redraws chart
 }
+
+const legendOnClick = function(e,legendItem,legend) {
+
+  const index = legendItem.datasetIndex;
+  const ci = legend.chart;
+  if (ci.isDatasetVisible(index)) {
+    ci.hide(index);
+    legendItem.hidden = true;
+    console.log('ello');
+  } else {
+    ci.show(index);
+    legendItem.hidden = false;
+    console.log('bye');
+  }
+
+  //Su
+  if (!myChart.isDatasetVisible(0)) {
+    console.log("hidden");
+    document.getElementById('xSuHandle').style.display = "none";
+    document.getElementById('ySuHandle').style.display = "none";
+  }
+  if (myChart.isDatasetVisible(0)) {
+    console.log("visable");
+    document.getElementById('xSuHandle').style.display = "block";
+    document.getElementById('ySuHandle').style.display = "block";
+  }
+  //De
+  if (!myChart.isDatasetVisible(1)) {
+    console.log("hidden");
+    document.getElementById('xDeHandle').style.display = "none";
+    document.getElementById('yDeHandle').style.display = "none";
+  }
+  if (myChart.isDatasetVisible(1)) {
+    console.log("visable");
+    document.getElementById('xDeHandle').style.display = "block";
+    document.getElementById('yDeHandle').style.display = "block";
+  }
+  //aSu
+  if (!myChart.isDatasetVisible(3)) {
+    console.log("hidden");
+    document.getElementById('axSuHandle').style.display = "none";
+    document.getElementById('aySuHandle').style.display = "none";
+  }
+  if (myChart.isDatasetVisible(3)) {
+    console.log("visable");
+    document.getElementById('axSuHandle').style.display = "block";
+    document.getElementById('aySuHandle').style.display = "block";
+  }
+  //aDe
+  if (!myChart.isDatasetVisible(4)) {
+    console.log("hidden");
+    document.getElementById('axDeHandle').style.display = "none";
+    document.getElementById('ayDeHandle').style.display = "none";
+  }
+  if (myChart.isDatasetVisible(4)) {
+    console.log("visable");
+    document.getElementById('axDeHandle').style.display = "block";
+    document.getElementById('ayDeHandle').style.display = "block";
+  }
+}
+
 
 //setting chart values etc
 var myChart = new Chart(ctx, {
@@ -134,7 +191,6 @@ var myChart = new Chart(ctx, {
       backgroundColor: "#236af7",
       hidden: true,
     },
-
     {
       label: 'X-Equilibrium',
       data: [{ x: xIn, y: yIn }, { x: xIn, y: 0 }],
@@ -196,7 +252,8 @@ var myChart = new Chart(ctx, {
             //if the label is any of them, don't show it
             return item.text !== 'S->D' && item.text !== 'X-Equilibrium' && item.text !== 'Y-Equilibrium';
           }
-        }
+        },
+        onclick: legendOnClick,
       },
         afterRender: function (chart) {
           positionHandles();
@@ -249,6 +306,11 @@ function positionHandles() {
   var axSuHandle = document.getElementById('axSuHandle');
   axSuHandle.style.left = (canvasPosition.left + window.scrollX + myChart.scales.x.getPixelForValue(axSuL) - 10) + 'px';
   axSuHandle.style.top = (canvasPosition.top + window.scrollY + myChart.scales.y.getPixelForValue(aySuL) - 10) + 'px';
+  //check each dataset in chart
+  //if dataset is hidden, hide handles
+
+  
+
 }
 
 positionHandles()
@@ -264,6 +326,7 @@ window.addEventListener('resize', function () {
 });
 
 //values form listener
+//ADD ADDITIONAL VALUES WHEN UPDATING SUMMARY
 document.getElementById("values-form").addEventListener("submit", function (event) {
   event.preventDefault();
 
@@ -309,6 +372,7 @@ document.getElementById("values-form").addEventListener("submit", function (even
 });
 
 //resets all values
+//ADD VALUES FOR ADDITIONAL LINES, SOMEHOW RESET TO HIDDEN
 function reset() {
   //resets graph
   xDeL = 10;
@@ -319,6 +383,15 @@ function reset() {
   ySuU = 10;
   xSuL = 0;
   ySuL = 0;
+  //additional lines
+  var axDeL = 8;
+  var ayDeL = 0;
+  var axDeU = 0;
+  var ayDeU = 8;
+  var axSuU = 10;
+  var aySuU = 8;
+  var axSuL = 2;
+  var aySuL = 0;
 
   //resets input defaults
   document.getElementById("xDeLVal").value = 10;
@@ -349,6 +422,7 @@ var ayDeHandle = document.getElementById('ayDeHandle');
 var aySuHandle = document.getElementById('aySuHandle');
 var axSuHandle = document.getElementById('axSuHandle');
 
+//original
 var isDragging = false;
 var xDeDragging = false;
 var yDeDragging = false;
@@ -377,8 +451,25 @@ xSuHandle.addEventListener('mousedown', function (e) {
   isDragging = true;
   xSuDragging = true;
 });
-//add this for other handles!!!
+axDeHandle.addEventListener('mousedown', function (e) {
+  //the handle drags when the mouse is pressed down
+  isDragging = true;
+  axDeDragging = true;
+});
+ayDeHandle.addEventListener('mousedown', function (e) {
+  isDragging = true;
+  ayDeDragging = true;
+});
+aySuHandle.addEventListener('mousedown', function (e) {
+  isDragging = true;
+  aySuDragging = true;
+});
+axSuHandle.addEventListener('mousedown', function (e) {
+  isDragging = true;
+  axSuDragging = true;
+});
 
+//DOUBLE CHECK THE A FUNCTIONS
 window.addEventListener('mousemove', function(e) {
   //moves the handles when the mouse moves
   //toFixed means to the 1st decimal point (0 is none, 2 is 2nd etc)
@@ -481,7 +572,103 @@ window.addEventListener('mousemove', function(e) {
       }
     }
 
-    //add ***Dragging for the rest
+    if (axDeDragging) {
+      axDeL = (myChart.scales.x.getValueForPixel(e.clientX - myChart.canvas.getBoundingClientRect().left)).toFixed(1);
+      if (axDeL <= 0) {
+        //sets min as 0
+        axDeL = 0;
+      }
+      //else if (axDeL <= xIn) {
+      //  axDeL = xIn;
+      //}
+      else {
+        axDeL = parseFloat(axDeL);
+      }
+      ayDeL = (myChart.scales.y.getValueForPixel(e.clientY - myChart.canvas.getBoundingClientRect().top)).toFixed(1);
+      if (ayDeL <= 0) {
+        //sets min as 0
+        ayDeL = 0;
+      }
+      //else if (ayDeL >= yIn) {
+      //  ayDeL = yIn;
+      //}
+      else {
+        ayDeL = parseFloat(ayDeL);
+      }
+    }
+    if (ayDeDragging) {
+      ayDeU = (myChart.scales.y.getValueForPixel(e.clientY - myChart.canvas.getBoundingClientRect().top)).toFixed(1);
+      if (ayDeU <= 0) {
+        //sets min as 0
+        ayDeU = 0;
+      }
+      //else if (ayDeU <= yIn) {
+      //  ayDeU = yIn;
+      //}
+      else {
+        ayDeU = parseFloat(ayDeU);
+      }
+      axDeU = (myChart.scales.x.getValueForPixel(e.clientX - myChart.canvas.getBoundingClientRect().left)).toFixed(1);
+      if (axDeU <= 0) {
+        //sets min as 0
+        axDeU = 0;
+      }
+      //else if (axDeU >= xIn) {
+      //  axDeU = xIn;
+      //}
+      else {
+        axDeU = parseFloat(axDeU);
+      }
+    }
+    if (aySuDragging) {
+      aySuU = (myChart.scales.y.getValueForPixel(e.clientY - myChart.canvas.getBoundingClientRect().top)).toFixed(1);
+      if (aySuU <= 0) {
+        //sets min as 0
+        aySuU = 0;
+      }
+      //else if (aySuU <= yIn) {
+      //  aySuU = yIn;
+      //}
+      else {
+        aySuU = parseFloat(aySuU);
+      }
+      axSuU = (myChart.scales.x.getValueForPixel(e.clientX - myChart.canvas.getBoundingClientRect().left)).toFixed(1);
+      if (axSuU <= 0) {
+        //sets min as 0
+        axSuU = 0;
+      }
+      //else if (axSuU <= xIn) {
+      //  axSuU = xIn;
+      //}
+      else {
+        axSuU = parseFloat(axSuU);
+      }
+    }
+    if (axSuDragging) {
+      aySuL = (myChart.scales.y.getValueForPixel(e.clientY - myChart.canvas.getBoundingClientRect().top)).toFixed(1);
+      if (aySuL <= 0) {
+        //sets min as 0
+        aySuL = 0;
+      }
+      //else if (aySuL >= yIn) {
+      //  aySuL = yIn;
+      //}
+      else {
+        aySuL = parseFloat(aySuL);
+      }
+      axSuL = (myChart.scales.x.getValueForPixel(e.clientX - myChart.canvas.getBoundingClientRect().left)).toFixed(1);
+      if (axSuL <= 0) {
+        //sets min as 0
+        axSuL = 0;
+      }
+      //else if (axSuL >= xIn) {
+      //  axSuL = xIn;
+      //}
+      else {
+        axSuL = parseFloat(axSuL);
+      }
+    }
+
     recalculateIntersections();
     updateChartData(myChart); //updated chart for all the drags
     updateSummary();
@@ -504,6 +691,19 @@ window.addEventListener('mouseup', function(e) {
   }
   if (xSuDragging) {
     xSuDragging = false;
+  }
+
+  if (axDeDragging) {
+    axDeDragging = false;
+  }
+  if (ayDeDragging) {
+    ayDeDragging = false;
+  }
+  if (aySuDragging) {
+    aySuDragging = false;
+  }
+  if (axSuDragging) {
+    axSuDragging = false;
   }
 })
 
