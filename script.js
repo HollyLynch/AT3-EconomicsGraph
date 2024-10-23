@@ -30,10 +30,12 @@ function recalculateIntersections() {
   xIn = (cDe - cSu) / (mSu - mDe);
   //putting x into D
   yIn = (mDe * xIn) + cDe;
+  console.log("recalc func");
 }
 recalculateIntersections();
 
 function updateSummary() {
+  //original demand & supply
   document.getElementById("xDLVal").innerHTML = xDeL.toFixed(1); //demand lower
   document.getElementById("yDLVal").innerHTML = yDeL.toFixed(1);
   document.getElementById("xDUVal").innerHTML = xDeU.toFixed(1); //demand upper
@@ -42,10 +44,21 @@ function updateSummary() {
   document.getElementById("ySLVal").innerHTML = ySuL.toFixed(1);
   document.getElementById("xSUVal").innerHTML = xSuU.toFixed(1); //supply upper
   document.getElementById("ySUVal").innerHTML = ySuU.toFixed(1);
+  //ADDITIONAL demand & supply
+  document.getElementById("axDLVal").innerHTML = axDeL.toFixed(1); //demand lower
+  document.getElementById("ayDLVal").innerHTML = ayDeL.toFixed(1);
+  document.getElementById("axDUVal").innerHTML = axDeU.toFixed(1); //demand upper
+  document.getElementById("ayDUVal").innerHTML = ayDeU.toFixed(1);
+  document.getElementById("axSLVal").innerHTML = axSuL.toFixed(1); //supply lower
+  document.getElementById("aySLVal").innerHTML = aySuL.toFixed(1);
+  document.getElementById("axSUVal").innerHTML = axSuU.toFixed(1); //supply upper
+  document.getElementById("aySUVal").innerHTML = aySuU.toFixed(1);
+  //equilibrium
   document.getElementById("xInVal").innerHTML = xIn.toFixed(3); //equilibrium
   document.getElementById("yInVal").innerHTML = yIn.toFixed(3);
-  document.getElementById("xIVal").innerHTML = xIn.toFixed(3); //intersect
-  document.getElementById("yIVal").innerHTML = yIn.toFixed(3); //intersect
+  //document.getElementById("xIVal").innerHTML = xIn.toFixed(3); //intersect
+  //document.getElementById("yIVal").innerHTML = yIn.toFixed(3); //intersect
+  console.log("upt sum func");
 }
 updateSummary();
 
@@ -87,6 +100,7 @@ function updateChartData(chart) {
   recalculateIntersections();
   
   chart.update() //redraws chart
+  console.log('update chart data func');
 }
 
 const legendOnClick = function(e,legendItem,legend) {
@@ -96,11 +110,11 @@ const legendOnClick = function(e,legendItem,legend) {
   if (ci.isDatasetVisible(index)) {
     ci.hide(index);
     legendItem.hidden = true;
-    console.log('ello');
+    console.log('hidden');
   } else {
     ci.show(index);
     legendItem.hidden = false;
-    console.log('bye');
+    console.log('visible');
   }
 
   //Su
@@ -197,12 +211,11 @@ var myChart = new Chart(ctx, {
       borderColor: "black",
       borderDash: [4, 4],
       fill: false,
-      backgroundColor: "pink",
     },
     {
       label: 'Y-Equilibrium',
       data: [{ x: 0, y: yIn }, { x: xIn, y: yIn }],
-      borderColor: /*"black"*/ "red",
+      borderColor: "black" /*"red"*/,
       borderDash: [4, 4],
       fill: false,
     },
@@ -309,7 +322,7 @@ function positionHandles() {
   //check each dataset in chart
   //if dataset is hidden, hide handles
 
-  
+  console.log('pos hand func');
 
 }
 
@@ -322,7 +335,7 @@ window.addEventListener('resize', function () {
 
   updateChartData(myChart);
   positionHandles(); // Update handle positions after resizing the chart
-
+  console.log("window resize");
 });
 
 //values form listener
@@ -330,6 +343,7 @@ window.addEventListener('resize', function () {
 document.getElementById("values-form").addEventListener("submit", function (event) {
   event.preventDefault();
 
+    //original
     xDeU = parseInt(document.getElementById("xDeUVal").value);
     yDeU = parseInt(document.getElementById("yDeUVal").value);
     xDeL = parseInt(document.getElementById("xDeLVal").value);
@@ -338,6 +352,15 @@ document.getElementById("values-form").addEventListener("submit", function (even
     ySuL = parseInt(document.getElementById("ySuLVal").value);
     xSuU = parseInt(document.getElementById("xSuUVal").value);
     ySuU = parseInt(document.getElementById("ySuUVal").value);
+    //additional
+    axDeU = parseInt(document.getElementById("axDeUVal").value);
+    ayDeU = parseInt(document.getElementById("ayDeUVal").value);
+    axDeL = parseInt(document.getElementById("axDeLVal").value);
+    ayDeL = parseInt(document.getElementById("ayDeLVal").value);
+    axSuL = parseInt(document.getElementById("axSuLVal").value);
+    aySuL = parseInt(document.getElementById("aySuLVal").value);
+    axSuU = parseInt(document.getElementById("axSuUVal").value);
+    aySuU = parseInt(document.getElementById("aySuUVal").value);
   
   //forces the variables to be at the equilbrium point and not below
   if (xDeU >= xIn) {
@@ -369,6 +392,7 @@ document.getElementById("values-form").addEventListener("submit", function (even
   updateChartData(myChart); //updated chart for all the drags
   updateSummary();
   positionHandles(); //updates the handles
+  console.log("values form");
 });
 
 //resets all values
@@ -384,14 +408,14 @@ function reset() {
   xSuL = 0;
   ySuL = 0;
   //additional lines
-  var axDeL = 8;
-  var ayDeL = 0;
-  var axDeU = 0;
-  var ayDeU = 8;
-  var axSuU = 10;
-  var aySuU = 8;
-  var axSuL = 2;
-  var aySuL = 0;
+  axDeL = 8;
+  ayDeL = 0;
+  axDeU = 0;
+  ayDeU = 8;
+  axSuU = 10;
+  aySuU = 8;
+  axSuL = 2;
+  aySuL = 0;
 
   //resets input defaults
   document.getElementById("xDeLVal").value = 10;
@@ -403,11 +427,21 @@ function reset() {
   document.getElementById("xSuUVal").value = 10;
   document.getElementById("ySuUVal").value = 10;
 
+  document.getElementById("axDeLVal").value = 8;
+  document.getElementById("ayDeLVal").value = 0;
+  document.getElementById("axDeUVal").value = 0;
+  document.getElementById("ayDeUVal").value = 8;
+  document.getElementById("axSuLVal").value = 2;
+  document.getElementById("aySuLVal").value = 0;
+  document.getElementById("axSuUVal").value = 10;
+  document.getElementById("aySuUVal").value = 8;
+
 
   recalculateIntersections();
   updateChartData(myChart); //updated chart for all the drags
   updateSummary();
   positionHandles(); //updates the handles
+  console.log("reset func");
 }
 
 
@@ -438,35 +472,43 @@ xDeHandle.addEventListener('mousedown', function(e) {
   //the handle drags when the mouse is pressed down
   isDragging = true;
   xDeDragging = true;
+  console.log("xde mousedown");
 });
 yDeHandle.addEventListener('mousedown', function (e) {
   isDragging = true;
   yDeDragging = true;
+  console.log("yde mousedown");
 });
 ySuHandle.addEventListener('mousedown', function (e) {
   isDragging = true;
   ySuDragging = true;
+  console.log("ysu mousedown");
 });
 xSuHandle.addEventListener('mousedown', function (e) {
   isDragging = true;
   xSuDragging = true;
+  console.log("xsu mousedown");
 });
 axDeHandle.addEventListener('mousedown', function (e) {
   //the handle drags when the mouse is pressed down
   isDragging = true;
   axDeDragging = true;
+  console.log("axde mousedown");
 });
 ayDeHandle.addEventListener('mousedown', function (e) {
   isDragging = true;
   ayDeDragging = true;
+  console.log("ayde mousedown");
 });
 aySuHandle.addEventListener('mousedown', function (e) {
   isDragging = true;
   aySuDragging = true;
+  console.log("aysu mousedown");
 });
 axSuHandle.addEventListener('mousedown', function (e) {
   isDragging = true;
   axSuDragging = true;
+  console.log("axsu mousedown");
 });
 
 //DOUBLE CHECK THE A FUNCTIONS
@@ -668,7 +710,7 @@ window.addEventListener('mousemove', function(e) {
         axSuL = parseFloat(axSuL);
       }
     }
-
+    console.log("dragging");
     recalculateIntersections();
     updateChartData(myChart); //updated chart for all the drags
     updateSummary();
@@ -704,6 +746,6 @@ window.addEventListener('mouseup', function(e) {
   }
   if (axSuDragging) {
     axSuDragging = false;
-  }
+  } console.log("drag mouseup");
 })
 

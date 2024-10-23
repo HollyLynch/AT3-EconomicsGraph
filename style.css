@@ -1,6 +1,7 @@
 html {
   height: 100%;
   width: 100%;
+  background-color: #ccfff7;
 }
 /* !!# means id, . means class!! */
 
@@ -17,9 +18,9 @@ html {
 .summary {
   position: relative;
   right: 0;
-  width: 18%;
+  width: 16%;
   height: 50%;
-  background-color: mediumvioletred;
+/*  background-color: mediumvioletred;*/
   padding-left: 8px; 
   padding-right: 6px;
   /*adding a space in the div so the writting's not on the edge*/
@@ -33,10 +34,10 @@ html {
 }
 .set-values {
   position: relative;
-  background-color: aquamarine;
+/*  background-color: aquamarine;*/
   padding-left: 8px;
   padding-right: 6px;
-  width: 18%;
+  width: 20%;
   height: 50%;
   display: flex;
   /*from w3schools*/
