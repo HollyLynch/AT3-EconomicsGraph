@@ -30,7 +30,6 @@ function recalculateIntersections() {
   xIn = (cDe - cSu) / (mSu - mDe);
   //putting x into D
   yIn = (mDe * xIn) + cDe;
-  console.log("recalc func");
 }
 recalculateIntersections();
 
@@ -58,7 +57,6 @@ function updateSummary() {
   document.getElementById("yInVal").innerHTML = yIn.toFixed(3);
   //document.getElementById("xIVal").innerHTML = xIn.toFixed(3); //intersect
   //document.getElementById("yIVal").innerHTML = yIn.toFixed(3); //intersect
-  console.log("upt sum func");
 }
 updateSummary();
 
@@ -100,7 +98,6 @@ function updateChartData(chart) {
   recalculateIntersections();
   
   chart.update() //redraws chart
-  console.log('update chart data func');
 }
 
 const legendOnClick = function(e,legendItem,legend) {
@@ -322,8 +319,6 @@ function positionHandles() {
   //check each dataset in chart
   //if dataset is hidden, hide handles
 
-  console.log('pos hand func');
-
 }
 
 positionHandles()
@@ -335,7 +330,6 @@ window.addEventListener('resize', function () {
 
   updateChartData(myChart);
   positionHandles(); // Update handle positions after resizing the chart
-  console.log("window resize");
 });
 
 //values form listener
@@ -392,11 +386,9 @@ document.getElementById("values-form").addEventListener("submit", function (even
   updateChartData(myChart); //updated chart for all the drags
   updateSummary();
   positionHandles(); //updates the handles
-  console.log("values form");
 });
 
 //resets all values
-//ADD VALUES FOR ADDITIONAL LINES, SOMEHOW RESET TO HIDDEN
 function reset() {
   //resets graph
   xDeL = 10;
@@ -441,7 +433,6 @@ function reset() {
   updateChartData(myChart); //updated chart for all the drags
   updateSummary();
   positionHandles(); //updates the handles
-  console.log("reset func");
 }
 
 
@@ -472,46 +463,37 @@ xDeHandle.addEventListener('mousedown', function(e) {
   //the handle drags when the mouse is pressed down
   isDragging = true;
   xDeDragging = true;
-  console.log("xde mousedown");
 });
 yDeHandle.addEventListener('mousedown', function (e) {
   isDragging = true;
   yDeDragging = true;
-  console.log("yde mousedown");
 });
 ySuHandle.addEventListener('mousedown', function (e) {
   isDragging = true;
   ySuDragging = true;
-  console.log("ysu mousedown");
 });
 xSuHandle.addEventListener('mousedown', function (e) {
   isDragging = true;
   xSuDragging = true;
-  console.log("xsu mousedown");
 });
 axDeHandle.addEventListener('mousedown', function (e) {
   //the handle drags when the mouse is pressed down
   isDragging = true;
   axDeDragging = true;
-  console.log("axde mousedown");
 });
 ayDeHandle.addEventListener('mousedown', function (e) {
   isDragging = true;
   ayDeDragging = true;
-  console.log("ayde mousedown");
 });
 aySuHandle.addEventListener('mousedown', function (e) {
   isDragging = true;
   aySuDragging = true;
-  console.log("aysu mousedown");
 });
 axSuHandle.addEventListener('mousedown', function (e) {
   isDragging = true;
   axSuDragging = true;
-  console.log("axsu mousedown");
 });
 
-//DOUBLE CHECK THE A FUNCTIONS
 window.addEventListener('mousemove', function(e) {
   //moves the handles when the mouse moves
   //toFixed means to the 1st decimal point (0 is none, 2 is 2nd etc)
@@ -710,7 +692,6 @@ window.addEventListener('mousemove', function(e) {
         axSuL = parseFloat(axSuL);
       }
     }
-    console.log("dragging");
     recalculateIntersections();
     updateChartData(myChart); //updated chart for all the drags
     updateSummary();
@@ -746,6 +727,5 @@ window.addEventListener('mouseup', function(e) {
   }
   if (axSuDragging) {
     axSuDragging = false;
-  } console.log("drag mouseup");
 })
 
