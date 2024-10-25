@@ -699,7 +699,7 @@ window.addEventListener('mousemove', function(e) {
   }
 });
 
-window.addEventListener('mouseup', function(e) {
+window.addEventListener('mouseup', function (e) {
   if (isDragging) {
     isDragging = false;
   }
@@ -727,5 +727,6 @@ window.addEventListener('mouseup', function(e) {
   }
   if (axSuDragging) {
     axSuDragging = false;
+  }
 })
 
